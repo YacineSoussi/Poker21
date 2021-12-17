@@ -4,10 +4,21 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="../styles/index.css" rel="stylesheet">
+        <link href="./styles/index.css" rel="stylesheet">
         <title>Poker-21</title>
+        <script defer src="index.js" type="text/javascript"></script>
+        <script defer src="scripts/deck.js" type="module"></script>
     </head>
     <body>
-        <h1>Hello world !</h1>
+        <h1 class="title">Poker 21 !</h1>
+        <button id="start">START</button>
+        <div id="main" class="hidden">
+            <div class="computer-deck deck"></div>
+            <div id="buttons">
+                <button id="retry" class="none">Try again</button>
+                <button id="finish">Finish</button>
+                <button id="draw">Draw</button>
+            </div>
+        </div>
     </body>
 </html>
