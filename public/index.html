@@ -1,24 +1,50 @@
 <!DOCTYPE html>
     <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="./styles/index.css" rel="stylesheet">
-        <title>Poker-21</title>
-        <script defer src="index.js" type="text/javascript"></script>
-        <script defer src="scripts/deck.js" type="module"></script>
-    </head>
-    <body>
-        <h1 class="title">Poker 21 !</h1>
-        <button id="start">START</button>
-        <div id="main" class="hidden">
-            <div class="computer-deck deck"></div>
-            <div id="buttons">
-                <button id="retry" class="none">Try again</button>
-                <button id="finish">Finish</button>
-                <button id="draw">Draw</button>
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+            <!-- Css -->
+            <link href="./styles/global.css" rel="stylesheet">
+            <link href="./styles/index.css" rel="stylesheet">
+
+            <title>Poker-21</title>
+
+            <!-- Scripts -->
+            <script defer src="index.js" type="text/javascript"></script>
+            <script defer src="./scripts/deck.js" type="text/javascript"></script>
+        </head>
+        <body>
+            <h1 class="title text-center">Poker 21 !</h1>
+            <button id="start" class="d-block m-auto">Start the game</button>
+
+            <!-- Spinner -->
+            <div
+                id="spinner-block"
+                class="d-none d-flex justify-center flex-column align-center mt-2 mb-2">
+                <p>Loading cards ...</p>
+                <div class="spinner-loading"></div>
             </div>
-        </div>
-    </body>
-</html>
+
+            <!-- Main -->
+            <div id="main" class="hidden">
+                <div class="deck d-block m-auto"></div>
+                <div id="buttons" class="d-flex justify-center text-center">
+                    <button id="retry" class="d-none">Try again</button>
+                    <button id="finish">Finish</button>
+                    <button id="pull">Pull</button>
+                </div>
+                <div id="card-informations" class="text-center">
+                    <div>
+                        <span>Card pulled ==></span>
+                        <span id="card-pulled">No cards pulled</span>
+                    </div>
+                    <div id="card-points">
+                        <span>Card points ==></span>
+                        <span id="card-points">0</span>
+                    </div>
+                </div>
+            </div>
+        </body>
+    </html>
