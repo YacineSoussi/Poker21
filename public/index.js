@@ -1,41 +1,76 @@
-const startID = document.getElementById("start");
-const retryID = document.getElementById("retry");
-const drawID = document.getElementById("draw");
-const finishID = document.getElementById("finish");
-const mainID = document.getElementById("main");
+/*** DOM elements ***/
+
+const startID = document.getElementById('start');
+const retryID = document.getElementById('retry');
+const pullID = document.getElementById('pull');
+const finishID = document.getElementById('finish');
+const mainID = document.getElementById('main');
+const cardPulled = document.getElementById('card-pulled');
+const cardPoints = document.getElementById('card-points');
+const spinnerLoading = document.getElementById('spinner-block');
+
+/*** Variables ***/
 
 let gameIsOver = false;
 
 /*** Events ***/
 
-startID.addEventListener("click", function() {
+startID.addEventListener('click', function() {
     start();
 });
 
-retryID.addEventListener("click", function() {
+retryID.addEventListener('click', function() {
     retry();
 });
 
-finishID.addEventListener("click", function() {
-    console.log('Finish');
+finishID.addEventListener('click', function() {
     finish();
 });
 
-drawID.addEventListener("click", function() {
-    console.log('draw');
+pullID.addEventListener('click', function() {
+    // TODO ...
 });
 
 /*** Functions ***/
 
+/**
+ * Start the game
+ * - Loading cards
+ * - Enable or disable DOM elements
+ */
 function start() {
-    startID.classList.add("hidden");    
-    mainID.classList.remove("hidden");
+    const deck = new Deck();
+
+    // DOM elements manipulation
+    startID.classList.add('d-none');
+    spinnerLoading.classList.remove('d-none');
+
+    // retrieve cards data
+    deck.getCardsData()
+        .then(data => {
+            if (data.cards.length) {
+                deck.setCards(data.cards);
+                mainID.classList.remove('hidden');
+                spinnerLoading.classList.add('d-none');
+            }
+        })
+        .catch(error => {
+            throw new Error(error);
+        });
 }
 
+/**
+ * Finish the game
+ * - Enable or disable DOM elements
+ */
 function finish() {
-    retryID.classList.remove("none");
+    retryID.classList.remove('d-none');
 }
 
+/**
+ * Retry the game
+ * - Enable or disable DOM elements
+ */
 function retry() {
-    retryID.classList.add("none");    
+    retryID.classList.add('d-none');
 }
