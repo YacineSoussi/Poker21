@@ -8,10 +8,13 @@ const mainID = document.getElementById('main');
 const cardPulled = document.getElementById('card-pulled');
 const cardPoints = document.getElementById('card-points');
 const spinnerLoading = document.getElementById('spinner-block');
+const deck = document.getElementById('deck');
 
 /*** Variables ***/
 
 let gameIsOver = false;
+let cards = [];
+let pulledCardCount = -1;
 
 /*** Events ***/
 
@@ -28,7 +31,28 @@ finishID.addEventListener('click', function() {
 });
 
 pullID.addEventListener('click', function() {
-    // TODO ...
+    pulledCardCount ++;
+
+    // retrieve cards from local storage
+    cards = JSON.parse(localStorage.getItem('cards'));
+
+    // get random card
+    let randomIndexCard = getRandomInt(cards.length);
+    let randomCard = cards[randomIndexCard];
+
+    // new card
+    let newCard = document.createElement("img");
+
+    // new cards properties ...
+    newCard.src = randomCard.images.svg;
+    newCard.classList.add(randomCard.code);
+    newCard.classList.add("defaultCardStyle ");
+
+    if (pulledCardCount > 0) {
+        newCard.style.left = JSON.stringify(pulledCardCount * 15) + "px";
+    }
+
+    deck.appendChild(newCard);
 });
 
 /*** Functions ***/
@@ -49,7 +73,7 @@ function start() {
     deck.getCardsData()
         .then(data => {
             if (data.cards.length) {
-                deck.setCards(data.cards);
+                localStorage.setItem('cards', JSON.stringify(data.cards));
                 mainID.classList.remove('hidden');
                 spinnerLoading.classList.add('d-none');
             }
@@ -73,4 +97,13 @@ function finish() {
  */
 function retry() {
     retryID.classList.add('d-none');
+}
+
+/**
+ * Get random number according to max range
+ * @param {integer} max Maximal number
+ * @returns Random number
+ */
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
 }
