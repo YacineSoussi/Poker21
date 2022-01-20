@@ -43,3 +43,16 @@
 .d-block {
     display: block;
 }
+
+.absolute {
+    position: absolute;
+}
+
+.relative {
+    position: relative;
+}
+
+.defaultCardStyle {
+    position: absolute;
+    height: 100%;
+}
