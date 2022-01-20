@@ -45,7 +45,6 @@ pullID.addEventListener('click', function() {
 
         // new cards properties ...
         newCard.src = randomCard.images.svg;
-        newCard.classList.add(randomCard.code);
         newCard.classList.add("defaultCardStyle ");
 
         // increase margin between each cards in each pull
@@ -62,6 +61,18 @@ pullID.addEventListener('click', function() {
 
         // display card pulled in DOM
         cardPulled.innerHTML = getCardSymbol(randomCard);
+
+        if (cardPoints.value) {
+            cardPoints.value = Number(cardPoints.value) + Number(getCardPoints(randomCard));
+        } else {
+            cardPoints.value = getCardPoints(randomCard);
+        }
+
+        // update value attribute
+        cardPoints.setAttribute("value", cardPoints.value);
+
+        // display card points in DOM
+        cardPoints.innerHTML = cardPoints.value;
 
         // remove card after pulling to avoid double
         cardsCopy.splice(randomIndexCard, 1);
@@ -141,27 +152,63 @@ function getCardSymbol(card) {
             if (values.includes(card.value)) {
                 return `${card.code.split('')[0]} ♠️`;
             } else {
-                return `${card.value.split('')[0]} ♠️`;
+                if (card.value === "10") {
+                    return `${card.value} ♠️`;
+                } else {
+                    return `${card.value.split('')[0]} ♠️`;
+                }
             }
         case "CLUBS":
             if (values.includes(card.value)) {
                 return `${card.code.split('')[0]} ♣️`;
             } else {
-                return `${card.value.split('')[0]} ♣️`;
+                if (card.value === "10") {
+                    return `${card.value} ♣️`;
+                } else {
+                    return `${card.value.split('')[0]} ♣️`;
+                }
             }
         case "HEARTS":
             if (values.includes(card.value)) {
                 return `${card.code.split('')[0]} ♥️`;
             } else {
-                return `${card.value.split('')[0]} ♥️`;
+                if (card.value === "10") {
+                    return `${card.value} ♥️`;
+                } else {
+                    return `${card.value.split('')[0]} ♥️`;
+                }
             }
         case "DIAMONDS":
             if (values.includes(card.value)) {
                 return `${card.code.split('')[0]} ♦️`;
             } else {
-                return `${card.value.split('')[0]} ♦️`;
+                if (card.value === "10") {
+                    return `${card.value} ♦️`;
+                } else {
+                    return `${card.value.split('')[0]} ♦️`;
+                }
             }
         default:
             throw new Error("Card suit not implemented");
+    }
+}
+
+/**
+ * Get card points according to random card pulled
+ * @param {object} card Random card
+ * @returns Card points
+ */
+function getCardPoints(card) {
+    switch (card.value) {
+        case "KING":
+            return 10;
+        case "JACK":
+            return 10;
+        case "QUEEN":
+            return 10;
+        case "ACE":
+            return 0;
+        default:
+            return card.value;
     }
 }
