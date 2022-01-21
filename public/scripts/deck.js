@@ -11,7 +11,7 @@ class Deck {
     async getCardsData() {
         let result;
 
-        await fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
+        await fetch("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
             .then(response => {
                 if (response.ok) {
                     return response.json();

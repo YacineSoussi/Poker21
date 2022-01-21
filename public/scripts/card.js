@@ -13,42 +13,42 @@ class Card {
         switch (card.suit) {
             case "SPADES":
                 if (values.includes(card.value)) {
-                    return `${card.code.split('')[0]} ♠️`;
+                    return `${card.code.split("")[0]} ♠️`;
                 } else {
                     if (card.value === "10") {
                         return `${card.value} ♠️`;
                     } else {
-                        return `${card.value.split('')[0]} ♠️`;
+                        return `${card.value.split("")[0]} ♠️`;
                     }
                 }
             case "CLUBS":
                 if (values.includes(card.value)) {
-                    return `${card.code.split('')[0]} ♣️`;
+                    return `${card.code.split("")[0]} ♣️`;
                 } else {
                     if (card.value === "10") {
                         return `${card.value} ♣️`;
                     } else {
-                        return `${card.value.split('')[0]} ♣️`;
+                        return `${card.value.split("")[0]} ♣️`;
                     }
                 }
             case "HEARTS":
                 if (values.includes(card.value)) {
-                    return `${card.code.split('')[0]} ♥️`;
+                    return `${card.code.split("")[0]} ♥️`;
                 } else {
                     if (card.value === "10") {
                         return `${card.value} ♥️`;
                     } else {
-                        return `${card.value.split('')[0]} ♥️`;
+                        return `${card.value.split("")[0]} ♥️`;
                     }
                 }
             case "DIAMONDS":
                 if (values.includes(card.value)) {
-                    return `${card.code.split('')[0]} ♦️`;
+                    return `${card.code.split("")[0]} ♦️`;
                 } else {
                     if (card.value === "10") {
                         return `${card.value} ♦️`;
                     } else {
-                        return `${card.value.split('')[0]} ♦️`;
+                        return `${card.value.split("")[0]} ♦️`;
                     }
                 }
             default:
