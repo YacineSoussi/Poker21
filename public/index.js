@@ -12,7 +12,8 @@ const deck = document.getElementById('deck');
 
 /*** Variables ***/
 
-let gameIsOver = false;
+const deckInstance = new Deck();
+const cardInstance = new Card();
 let cards = [];
 let cardsCopy = [];
 let pulledCardCount = -1;
@@ -60,12 +61,12 @@ pullID.addEventListener('click', function() {
         }
 
         // display card pulled in DOM
-        cardPulled.innerHTML = getCardSymbol(randomCard);
+        cardPulled.innerHTML = cardInstance.getCardSymbol(randomCard);
 
         if (cardPoints.value) {
-            cardPoints.value = Number(cardPoints.value) + Number(getCardPoints(randomCard));
+            cardPoints.value = Number(cardPoints.value) + Number(cardInstance.getCardPoints(randomCard));
         } else {
-            cardPoints.value = getCardPoints(randomCard);
+            cardPoints.value = cardInstance.getCardPoints(randomCard);
         }
 
         // update value attribute
@@ -89,14 +90,12 @@ pullID.addEventListener('click', function() {
  * - Enable or disable DOM elements
  */
 function start() {
-    const deck = new Deck();
-
     // DOM elements manipulation
     startID.classList.add("d-none");
     spinnerLoading.classList.remove("d-none");
 
     // retrieve cards data
-    deck.getCardsData()
+    deckInstance.getCardsData()
         .then(data => {
             if (data.cards.length) {
                 localStorage.setItem("cards", JSON.stringify(data.cards));
@@ -136,79 +135,4 @@ function retry() {
  */
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
-}
-
-/**
- * Get card with his symbol
- * - For example, card number "4" with suit "diamonds" will return 4♦️
- * @param {object} card Random card
- * @returns Card number with his symbol
- */
-function getCardSymbol(card) {
-    const values = ["KING", "JACK", "QUEEN", "AS"];
-
-    switch (card.suit) {
-        case "SPADES":
-            if (values.includes(card.value)) {
-                return `${card.code.split('')[0]} ♠️`;
-            } else {
-                if (card.value === "10") {
-                    return `${card.value} ♠️`;
-                } else {
-                    return `${card.value.split('')[0]} ♠️`;
-                }
-            }
-        case "CLUBS":
-            if (values.includes(card.value)) {
-                return `${card.code.split('')[0]} ♣️`;
-            } else {
-                if (card.value === "10") {
-                    return `${card.value} ♣️`;
-                } else {
-                    return `${card.value.split('')[0]} ♣️`;
-                }
-            }
-        case "HEARTS":
-            if (values.includes(card.value)) {
-                return `${card.code.split('')[0]} ♥️`;
-            } else {
-                if (card.value === "10") {
-                    return `${card.value} ♥️`;
-                } else {
-                    return `${card.value.split('')[0]} ♥️`;
-                }
-            }
-        case "DIAMONDS":
-            if (values.includes(card.value)) {
-                return `${card.code.split('')[0]} ♦️`;
-            } else {
-                if (card.value === "10") {
-                    return `${card.value} ♦️`;
-                } else {
-                    return `${card.value.split('')[0]} ♦️`;
-                }
-            }
-        default:
-            throw new Error("Card suit not implemented");
-    }
-}
-
-/**
- * Get card points according to random card pulled
- * @param {object} card Random card
- * @returns Card points
- */
-function getCardPoints(card) {
-    switch (card.value) {
-        case "KING":
-            return 10;
-        case "JACK":
-            return 10;
-        case "QUEEN":
-            return 10;
-        case "ACE":
-            return 0;
-        default:
-            return card.value;
-    }
 }
