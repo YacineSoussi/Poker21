@@ -5,10 +5,11 @@ const retryID = document.getElementById("retry");
 const pullID = document.getElementById("pull");
 const finishID = document.getElementById("finish");
 const mainID = document.getElementById("main");
-const cardPulled = document.getElementById("card-pulled");
-const cardPoints = document.getElementById("card-points");
-const spinnerLoading = document.getElementById("spinner-block");
-const deck = document.getElementById('deck');
+const cardPulledID = document.getElementById("card-pulled");
+const cardPointsID = document.getElementById("card-points");
+const spinnerLoadingID = document.getElementById("spinner-block");
+const deckID = document.getElementById("deck");
+const missingCardsID = document.getElementById("missing-cards");
 
 /*** Variables ***/
 
@@ -21,19 +22,19 @@ let cardsRow = 0;
 
 /*** Events ***/
 
-startID.addEventListener('click', function() {
+startID.addEventListener("click", function() {
     start();
 });
 
-retryID.addEventListener('click', function() {
+retryID.addEventListener("click", function() {
     retry();
 });
 
-finishID.addEventListener('click', function() {
+finishID.addEventListener("click", function() {
     finish();
 });
 
-pullID.addEventListener('click', function() {
+pullID.addEventListener("click", function() {
     if (cardsCopy.length > 0) {
         pulledCardCount ++;
 
@@ -61,24 +62,29 @@ pullID.addEventListener('click', function() {
         }
 
         // display card pulled in DOM
-        cardPulled.innerHTML = cardInstance.getCardSymbol(randomCard);
+        cardPulledID.innerHTML = cardInstance.getCardSymbol(randomCard);
 
-        if (cardPoints.value) {
-            cardPoints.value = Number(cardPoints.value) + Number(cardInstance.getCardPoints(randomCard));
+        if (cardPointsID.value) {
+            cardPointsID.value = Number(cardPointsID.value) + Number(cardInstance.getCardPoints(randomCard));
         } else {
-            cardPoints.value = cardInstance.getCardPoints(randomCard);
+            cardPointsID.value = cardInstance.getCardPoints(randomCard);
         }
 
         // update value attribute
-        cardPoints.setAttribute("value", cardPoints.value);
+        cardPointsID.setAttribute("value", cardPointsID.value);
 
         // display card points in DOM
-        cardPoints.innerHTML = cardPoints.value;
+        cardPointsID.innerHTML = cardPointsID.value;
 
         // remove card after pulling to avoid double
         cardsCopy.splice(randomIndexCard, 1);
 
-        deck.appendChild(newCard);
+        // update missing cards value
+        missingCardsID.value = cardsCopy.length;
+        missingCardsID.setAttribute("value", missingCardsID.value);
+        missingCardsID.innerHTML = missingCardsID.value;
+
+        deckID.appendChild(newCard);
     }
 });
 
@@ -92,7 +98,7 @@ pullID.addEventListener('click', function() {
 function start() {
     // DOM elements manipulation
     startID.classList.add("d-none");
-    spinnerLoading.classList.remove("d-none");
+    spinnerLoadingID.classList.remove("d-none");
 
     // retrieve cards data
     deckInstance.getCardsData()
@@ -100,7 +106,7 @@ function start() {
             if (data.cards.length) {
                 localStorage.setItem("cards", JSON.stringify(data.cards));
                 mainID.classList.remove("hidden");
-                spinnerLoading.classList.add("d-none");
+                spinnerLoadingID.classList.add("d-none");
             }
         })
         .catch(error => {
@@ -108,8 +114,13 @@ function start() {
         });
 
     // set cards data
-    cards = JSON.parse(localStorage.getItem('cards'));
-    cardsCopy = JSON.parse(localStorage.getItem('cards'));
+    cards = JSON.parse(localStorage.getItem("cards"));
+    cardsCopy = JSON.parse(localStorage.getItem("cards"));
+
+    // init missing cards value
+    missingCardsID.value = cardsCopy.length;
+    missingCardsID.setAttribute("value", missingCardsID.value);
+    missingCardsID.innerHTML = missingCardsID.value;
 }
 
 /**
