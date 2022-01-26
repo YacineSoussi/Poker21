@@ -35,7 +35,7 @@ finishID.addEventListener("click", function() {
 });
 
 pullID.addEventListener("click", function() {
-    if (cardsCopy.length > 0) {
+    if (cardsCopy && cardsCopy.length > 0) {
         pulledCardCount ++;
 
         // get random card
