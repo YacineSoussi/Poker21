@@ -19,13 +19,13 @@
         </head>
         <body>
             <h1 class="title text-center">Poker 21 !</h1>
-            <button id="start" class="d-block m-auto">Start the game</button>
+            <button id="start" class="d-block m-auto">Commencer la partie</button>
 
             <!-- Spinner -->
             <div
                 id="spinner-block"
                 class="d-none d-flex justify-center flex-column align-center mt-2 mb-2">
-                <p>Loading cards ...</p>
+                <p>Chargement des cartes ...</p>
                 <div class="spinner-loading"></div>
             </div>
 
@@ -33,21 +33,21 @@
             <div id="main" class="hidden">
                 <div id="deck" class="m-auto relative"></div>
                 <div id="buttons" class="d-flex justify-center text-center">
-                    <button id="retry" class="d-none">Try again</button>
-                    <button id="finish">Finish</button>
-                    <button id="pull">Pull</button>
+                    <button id="retry" class="d-none">Recommencer</button>
+                    <button id="finish" class="d-none">Terminer</button>
+                    <button id="pull">Tirer</button>
                 </div>
                 <div id="card-informations" class="text-center">
                     <div>
-                        <span>Card pulled : </span>
-                        <span id="card-pulled">No cards pulled</span>
+                        <span>Carte tirée : </span>
+                        <span id="card-pulled">Aucune carte tirée ...</span>
                     </div>
                     <div>
-                        <span>Card points : </span>
+                        <span>Nombre de points : </span>
                         <span id="card-points" value="0">0</span>
                     </div>
                     <div>
-                        <span>Missing cards : </span>
+                        <span>Nombre de cartes manquantes : </span>
                         <span id="missing-cards"></span>
                     </div>
                 </div>
