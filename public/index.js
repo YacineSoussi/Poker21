@@ -19,6 +19,7 @@ let cards = [];
 let cardsCopy = [];
 let pulledCardCount = -1;
 let cardsRow = 0;
+let gameFinish = false;
 
 /*** Events ***/
 
@@ -35,7 +36,10 @@ finishID.addEventListener("click", function() {
 });
 
 pullID.addEventListener("click", function() {
-    if (cardsCopy && cardsCopy.length > 0) {
+    if (!gameFinish && cardsCopy && cardsCopy.length > 0) {
+        // at least one card is pulled
+        finishID.classList.remove("d-none");
+
         pulledCardCount ++;
 
         // get random card
@@ -125,18 +129,35 @@ function start() {
 
 /**
  * Finish the game
- * - Enable or disable DOM elements
  */
 function finish() {
-    retryID.classList.remove("d-none");
+    if (!gameFinish) {
+        const cardPoints = Number(cardPointsID.value);
+        gameFinish = true;
+        retryID.classList.remove("d-none");
+
+        if (cardPoints > 21) {
+            alert('Tu as perdu'); // TODO change alert to another thing like message or another ? Or it's good ?
+        } else {
+            const randomCard = getRandomCard(cardsCopy);
+            const nextCard = cardInstance.getCardPoints(randomCard);
+            const sumCards = cardPoints + Number(nextCard);
+
+            if (sumCards > 21) {
+                alert(`Tu as perdu, la carte suivante valait ${nextCard} points`); // TODO change alert to another thing like message or another ? Or it's good ?
+            } else {
+                alert(`Tu as gagné, la carte suivante valait ${nextCard} points`); // TODO change alert to another thing like message or another ? Or it's good ?
+            }
+        }
+    }
 }
 
 /**
  * Retry the game
- * - Enable or disable DOM elements
  */
 function retry() {
     retryID.classList.add("d-none");
+    finishID.classList.add("d-none");
 }
 
 /**
@@ -146,4 +167,13 @@ function retry() {
  */
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
+}
+
+/**
+ * Get random card
+ * @param {array} cards All cards
+ * @returns Random card
+ */
+function getRandomCard(cards) {
+    return cards[getRandomInt(cards.length)];
 }
