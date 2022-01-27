@@ -137,16 +137,16 @@ function finish() {
         retryID.classList.remove("d-none");
 
         if (cardPoints > 21) {
-            alert('Tu as perdu'); // TODO change alert to another thing like message or another ? Or it's good ?
+            alert(`Tu as perdu, tu as déjà ${cardPoints} points.`); // TODO change alert to another thing like message or another ? Or it's good ?
         } else {
             const randomCard = getRandomCard(cardsCopy);
             const nextCard = cardInstance.getCardPoints(randomCard);
             const sumCards = cardPoints + Number(nextCard);
 
             if (sumCards > 21) {
-                alert(`Tu as perdu, la carte suivante valait ${nextCard} points`); // TODO change alert to another thing like message or another ? Or it's good ?
+                alert(`Tu as perdu, la carte suivante valait ${nextCard} points.`); // TODO change alert to another thing like message or another ? Or it's good ?
             } else {
-                alert(`Tu as gagné, la carte suivante valait ${nextCard} points`); // TODO change alert to another thing like message or another ? Or it's good ?
+                alert(`Tu as gagné, la carte suivante valait ${nextCard} points.`); // TODO change alert to another thing like message or another ? Or it's good ?
             }
         }
     }
