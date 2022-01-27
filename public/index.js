@@ -97,24 +97,32 @@ function start() {
 
 /**
  * Finish the game
+ * @param {*} isFinish Force finish of game
+ * - Force here is useful for main case like when card points of user is equal to 21
  */
-function finish() {
-    if (!gameFinish) {
-        const cardPoints = Number(cardPointsID.value);
+function finish(isFinish = false) {
+    if (isFinish && !gameFinish) {
         gameFinish = true;
         retryID.classList.remove("d-none");
+        alert(`Bravo tu as atteint les 21 points, tu as gagné.`); // TODO change alert to another thing like message or another ? Or it's good ?
+    } else {
+        if (!gameFinish) {
+            const cardPoints = Number(cardPointsID.value);
+            gameFinish = true;
+            retryID.classList.remove("d-none");
 
-        if (cardPoints > 21) {
-            alert(`Tu as perdu, tu as déjà ${cardPoints} points.`); // TODO change alert to another thing like message or another ? Or it's good ?
-        } else {
-            const randomCard = getRandomCard(cardsCopy);
-            const nextCard = cardInstance.getCardPoints(randomCard);
-            const sumCards = cardPoints + Number(nextCard);
-
-            if (sumCards > 21) {
-                alert(`Tu as perdu, la carte suivante valait ${nextCard} points.`); // TODO change alert to another thing like message or another ? Or it's good ?
+            if (cardPoints > 21) {
+                alert(`Tu as perdu, tu as déjà ${cardPoints} points.`); // TODO change alert to another thing like message or another ? Or it's good ?
             } else {
-                alert(`Tu as gagné, la carte suivante valait ${nextCard} points.`); // TODO change alert to another thing like message or another ? Or it's good ?
+                const randomCard = getRandomCard(cardsCopy);
+                const nextCard = cardInstance.getCardPoints(randomCard);
+                const sumCards = cardPoints + Number(nextCard);
+
+                if (sumCards > 21) {
+                    alert(`Tu as perdu, la carte suivante valait ${nextCard} points.`); // TODO change alert to another thing like message or another ? Or it's good ?
+                } else {
+                    alert(`Tu as gagné, la carte suivante valait ${nextCard} points.`); // TODO change alert to another thing like message or another ? Or it's good ?
+                }
             }
         }
     }
@@ -204,5 +212,11 @@ function pullCard() {
         missingCardsID.innerHTML = missingCardsID.value;
 
         deckID.appendChild(newCard);
+
+        setTimeout(() => {
+            if (Number(cardPointsID.value) === 21) {
+                finish(true);
+            }
+        }, 500);
     }
 }
