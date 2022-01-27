@@ -158,6 +158,7 @@ function finish() {
 function retry() {
     retryID.classList.add("d-none");
     finishID.classList.add("d-none");
+    location.reload(); // TODO search another way to reload everything without reload if possible
 }
 
 /**
