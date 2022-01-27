@@ -23,72 +23,40 @@ let gameFinish = false;
 
 /*** Events ***/
 
+/**
+ * Event trigger to start the game
+ */
 startID.addEventListener("click", function() {
     start();
 });
 
+/**
+ * Event trigger to retry the game
+ */
 retryID.addEventListener("click", function() {
     retry();
 });
 
+/**
+ * Event trigger finish the game
+ */
 finishID.addEventListener("click", function() {
     finish();
 });
 
+/**
+ * Event trigger to pull a card
+ */
 pullID.addEventListener("click", function() {
-    if (!gameFinish && cardsCopy && cardsCopy.length > 0) {
-        // at least one card is pulled
-        finishID.classList.remove("d-none");
+    pullCard();
+});
 
-        pulledCardCount ++;
-
-        // get random card
-        let randomIndexCard = getRandomInt(cardsCopy.length);
-        let randomCard = cardsCopy[randomIndexCard];
-
-        // new card
-        let newCard = document.createElement("img");
-
-        // new cards properties ...
-        newCard.src = randomCard.images.svg;
-        newCard.classList.add("defaultCardStyle ");
-
-        // increase margin between each cards in each pull
-        if (pulledCardCount > 0) {
-            newCard.style.left = JSON.stringify(pulledCardCount * 15) + "px";
-        }
-
-        // create a second row for other cards
-        if (pulledCardCount > 25) {
-            cardsRow ++;
-            newCard.style.top = "100px";
-            newCard.style.left = JSON.stringify(cardsRow * 15) + "px";
-        }
-
-        // display card pulled in DOM
-        cardPulledID.innerHTML = cardInstance.getCardSymbol(randomCard);
-
-        if (cardPointsID.value) {
-            cardPointsID.value = Number(cardPointsID.value) + Number(cardInstance.getCardPoints(randomCard));
-        } else {
-            cardPointsID.value = cardInstance.getCardPoints(randomCard);
-        }
-
-        // update value attribute
-        cardPointsID.setAttribute("value", cardPointsID.value);
-
-        // display card points in DOM
-        cardPointsID.innerHTML = cardPointsID.value;
-
-        // remove card after pulling to avoid double
-        cardsCopy.splice(randomIndexCard, 1);
-
-        // update missing cards value
-        missingCardsID.value = cardsCopy.length;
-        missingCardsID.setAttribute("value", missingCardsID.value);
-        missingCardsID.innerHTML = missingCardsID.value;
-
-        deckID.appendChild(newCard);
+/**
+ * Event trigger when user press letter "d" in keyboard
+ */
+document.addEventListener("keypress", function onEvent(event) {
+    if (event.key.toLowerCase() === 'd') {
+        pullCard();
     }
 });
 
@@ -177,4 +145,64 @@ function getRandomInt(max) {
  */
 function getRandomCard(cards) {
     return cards[getRandomInt(cards.length)];
+}
+
+/**
+ * Pull a card
+ */
+function pullCard() {
+    if (!gameFinish && cardsCopy && cardsCopy.length > 0) {
+        // at least one card is pulled
+        finishID.classList.remove("d-none");
+
+        pulledCardCount ++;
+
+        // get random card
+        let randomIndexCard = getRandomInt(cardsCopy.length);
+        let randomCard = cardsCopy[randomIndexCard];
+
+        // new card
+        let newCard = document.createElement("img");
+
+        // new cards properties ...
+        newCard.src = randomCard.images.svg;
+        newCard.classList.add("defaultCardStyle ");
+
+        // increase margin between each cards in each pull
+        if (pulledCardCount > 0) {
+            newCard.style.left = JSON.stringify(pulledCardCount * 15) + "px";
+        }
+
+        // create a second row for other cards
+        if (pulledCardCount > 25) {
+            cardsRow ++;
+            newCard.style.top = "100px";
+            newCard.style.left = JSON.stringify(cardsRow * 15) + "px";
+        }
+
+        // display card pulled in DOM
+        cardPulledID.innerHTML = cardInstance.getCardSymbol(randomCard);
+
+        if (cardPointsID.value) {
+            cardPointsID.value = Number(cardPointsID.value) + Number(cardInstance.getCardPoints(randomCard));
+        } else {
+            cardPointsID.value = cardInstance.getCardPoints(randomCard);
+        }
+
+        // update value attribute
+        cardPointsID.setAttribute("value", cardPointsID.value);
+
+        // display card points in DOM
+        cardPointsID.innerHTML = cardPointsID.value;
+
+        // remove card after pulling to avoid double
+        cardsCopy.splice(randomIndexCard, 1);
+
+        // update missing cards value
+        missingCardsID.value = cardsCopy.length;
+        missingCardsID.setAttribute("value", missingCardsID.value);
+        missingCardsID.innerHTML = missingCardsID.value;
+
+        deckID.appendChild(newCard);
+    }
 }
