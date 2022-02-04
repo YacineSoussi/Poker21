@@ -120,7 +120,6 @@ function start() {
 function finish(forceFinish = false) {
     if (!gameIsFinish) {
         gameIsFinish = true;
-        retryID.classList.remove("d-none");
 
         if (forceFinish) {
             alert(`Tu as gagné, tu as 21 points.`);
@@ -181,6 +180,7 @@ function pullCard() {
         // at least one card is pulled
         finishID.classList.remove("d-none");
         checkID.classList.remove("d-none");
+        retryID.classList.remove("d-none");
 
         // increase pulled card count
         pulledCardCount ++;
