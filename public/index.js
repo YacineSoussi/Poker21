@@ -4,6 +4,7 @@ const startID = document.getElementById("start");
 const retryID = document.getElementById("retry");
 const pullID = document.getElementById("pull");
 const finishID = document.getElementById("finish");
+const checkID = document.getElementById("check");
 const mainID = document.getElementById("main");
 const cardPulledID = document.getElementById("card-pulled");
 const cardPointsID = document.getElementById("card-points");
@@ -13,13 +14,23 @@ const missingCardsID = document.getElementById("missing-cards");
 
 /*** Variables ***/
 
+// instances
 const deckInstance = new Deck();
 const cardInstance = new Card();
+
+// cards properties
 let cards = [];
-let cardsCopy = [];
-let pulledCardCount = -1;
 let cardsRow = 0;
-let gameFinish = false;
+let cardSymbol = null;
+let cardPointsValue = 0;
+let cardPoints = null;
+let pulledCardCount = -1;
+let randomIndexCard = null;
+let randomCard = null;
+
+// other properties
+let gameIsFinish = false;
+let checkStateMode = false;
 
 /*** Events ***/
 
@@ -60,6 +71,13 @@ document.addEventListener("keypress", function onEvent(event) {
     }
 });
 
+/**
+ * Event trigger to check if next card will be make user winning or losing
+ */
+checkID.addEventListener("click", function() {
+    check();
+});
+
 /*** Functions ***/
 
 /**
@@ -87,41 +105,41 @@ function start() {
 
     // set cards data
     cards = JSON.parse(localStorage.getItem("cards"));
-    cardsCopy = JSON.parse(localStorage.getItem("cards"));
 
     // init missing cards value
-    missingCardsID.value = cardsCopy.length;
+    missingCardsID.value = cards.length;
     missingCardsID.setAttribute("value", missingCardsID.value);
     missingCardsID.innerHTML = missingCardsID.value;
 }
 
 /**
  * Finish the game
- * @param {*} isFinish Force finish of game
+ * @param {*} forceFinish Force finish of game
  * - Force here is useful for main case like when card points of user is equal to 21
  */
-function finish(isFinish = false) {
-    if (isFinish && !gameFinish) {
-        gameFinish = true;
+function finish(forceFinish = false) {
+    if (!gameIsFinish) {
+        gameIsFinish = true;
         retryID.classList.remove("d-none");
-        alert(`Bravo tu as atteint les 21 points, tu as gagné.`); // TODO change alert to another thing like message or another ? Or it's good ?
-    } else {
-        if (!gameFinish) {
-            const cardPoints = Number(cardPointsID.value);
-            gameFinish = true;
-            retryID.classList.remove("d-none");
 
-            if (cardPoints > 21) {
-                alert(`Tu as perdu, score supérieur à 21.`); // TODO change alert to another thing like message or another ? Or it's good ?
+        if (forceFinish) {
+            alert(`Tu as gagné, tu as 21 points.`);
+        } else {
+            if (cardPointsValue > 21) {
+                alert(`Tu as perdu, tu as plus de 21 points.`);
             } else {
-                const randomCard = getRandomCard(cardsCopy);
-                const nextCard = cardInstance.getCardPoints(randomCard);
-                const sumCards = cardPoints + Number(nextCard);
+                const randomCard = (checkStateMode) ? null : getRandomCard(cards);
+                const nextCard = (checkStateMode) ? Number(cardPoints) : Number(cardInstance.getCardPoints(randomCard));
+                const sumCards = cardPointsValue + Number(nextCard);
 
                 if (sumCards > 21) {
-                    alert(`Tu as gagné, la carte suivante valait ${nextCard} points. Score supérieur à 21.`); // TODO change alert to another thing like message or another ? Or it's good ?
+                    alert(`Tu as gagné, la carte suivante vaut ${nextCard} points. Ton score est supérieur à 21.`);
                 } else {
-                    alert(`Tu as perdu, la carte suivante valait ${nextCard} points. Score inférieur à 21.`); // TODO change alert to another thing like message or another ? Or it's good ?
+                    if (sumCards === 21) {
+                        alert(`Tu as gagné, la carte suivante vaut ${nextCard} points. Tu as 21 points.`);
+                    } else {
+                        alert(`Tu as perdu, la carte suivante vaut ${nextCard} points. Ton score est inférieur à 21.`);
+                    }
                 }
             }
         }
@@ -156,67 +174,106 @@ function getRandomCard(cards) {
 }
 
 /**
- * Pull a card
+ * Pull a card from deck
  */
 function pullCard() {
-    if (!gameFinish && cardsCopy && cardsCopy.length > 0) {
+    if (!gameIsFinish && cards && cards.length > 0) {
         // at least one card is pulled
         finishID.classList.remove("d-none");
+        checkID.classList.remove("d-none");
 
+        // increase pulled card count
         pulledCardCount ++;
 
         // get random card
-        let randomIndexCard = getRandomInt(cardsCopy.length);
-        let randomCard = cardsCopy[randomIndexCard];
+        if (!checkStateMode) {
+            randomIndexCard = getRandomInt(cards.length);
+            randomCard = cards[randomIndexCard];
+        }
 
-        // new card
-        let newCard = document.createElement("img");
-
-        // new cards properties ...
-        newCard.src = randomCard.images.svg;
-        newCard.classList.add("defaultCardStyle ");
+        // new card and his properties
+        let cardImage = document.createElement("img");
+        cardImage.src = randomCard.images.svg;
+        cardImage.classList.add("defaultCardStyle ");
 
         // increase margin between each cards in each pull
-        if (pulledCardCount > 0) {
-            newCard.style.left = JSON.stringify(pulledCardCount * 15) + "px";
-        }
+        if (pulledCardCount > 0) { cardImage.style.left = JSON.stringify(pulledCardCount * 15) + "px"; }
 
         // create a second row for other cards
         if (pulledCardCount > 25) {
             cardsRow ++;
-            newCard.style.top = "100px";
-            newCard.style.left = JSON.stringify(cardsRow * 15) + "px";
+            cardImage.style.top = "100px";
+            cardImage.style.left = JSON.stringify(cardsRow * 15) + "px";
         }
 
-        // display card pulled in DOM
-        cardPulledID.innerHTML = cardInstance.getCardSymbol(randomCard);
-
-        if (cardPointsID.value) {
-            cardPointsID.value = Number(cardPointsID.value) + Number(cardInstance.getCardPoints(randomCard));
-        } else {
-            cardPointsID.value = cardInstance.getCardPoints(randomCard);
+        // display card pulled in DOM (symbol + value)
+        if (!checkStateMode) {
+            cardSymbol = cardInstance.getCardSymbol(randomCard);
+            cardPulledID.innerHTML = cardSymbol;
         }
+
+        // set card points value
+        cardPointsValue = (checkStateMode) ?
+                                Number(cardPointsValue) + Number(cardPoints) :
+                                    (cardPointsValue) ?
+                                        Number(cardPointsValue) + Number(cardInstance.getCardPoints(randomCard)) :
+                                            Number(cardInstance.getCardPoints(randomCard));
 
         // update value attribute
-        cardPointsID.setAttribute("value", cardPointsID.value);
+        cardPointsID.setAttribute("value", cardPointsValue);
 
         // display card points in DOM
-        cardPointsID.innerHTML = cardPointsID.value;
+        cardPointsID.innerHTML = cardPointsValue;
 
         // remove card after pulling to avoid double
-        cardsCopy.splice(randomIndexCard, 1);
+        cards.splice(randomIndexCard, 1);
 
         // update missing cards value
-        missingCardsID.value = cardsCopy.length;
+        missingCardsID.value = cards.length;
         missingCardsID.setAttribute("value", missingCardsID.value);
         missingCardsID.innerHTML = missingCardsID.value;
 
-        deckID.appendChild(newCard);
+        // append card element to DOM
+        deckID.appendChild(cardImage);
 
-        setTimeout(() => {
-            if (Number(cardPointsID.value) === 21) {
-                finish(true);
+        // user have 21 points
+        if (cardPointsValue === 21) { finish(true); }
+
+        checkStateMode = false;
+    }
+}
+
+/**
+ * Check if next card will be make user winning or losing
+ */
+function check() {
+    if (!gameIsFinish && cards.length) {
+        // get random card
+        if (!checkStateMode) { // avoid random card each time, wait for changing state
+            randomIndexCard = getRandomInt(cards.length);
+            randomCard = cards[randomIndexCard];
+        }
+
+        // check state active
+        checkStateMode = true;
+
+        // update card values
+        cardPoints = cardInstance.getCardPoints(randomCard);
+        cardSymbol = cardInstance.getCardSymbol(randomCard);
+
+        // verify winning of user
+        if (cardPointsValue > 21) {
+            alert(`Tu as perdu, tu as plus de 21 points.`);
+        } else {
+            if (Number(cardPointsValue) + Number(cardPoints) > 21) {
+                alert(`Si tu t'arrêtes maintenant, tu gagnes la partie. La prochaine carte vaut ${cardPoints} points.`);
+            } else {
+                if (Number(cardPointsValue) + Number(cardPoints) === 21) {
+                    alert(`Si tu t'arrêtes maintenant, tu gagnes la partie. Tu auras 21 points.`);
+                } else {
+                    alert(`Si tu t'arrêtes maintenant, tu perds la partie. La prochaine carte vaut ${cardPoints} points.`);
+                }
             }
-        }, 500);
+        }
     }
 }
