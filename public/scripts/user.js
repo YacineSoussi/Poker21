@@ -13,7 +13,11 @@ class User {
             if (check) {
                 alert("Tu as déjà perdu, tu as plus de 21 points.");
             } else {
-                alert(`La prochaine carte vaut : ${currentCardPoints} points. Tu as perdu, tu as plus de 21 points.`);
+                if (currentCardPoints === -1) {
+                    alert("Tu as déjà perdu, tu as plus de 21 points.");
+                } else {
+                    alert(`La prochaine carte vaut : ${currentCardPoints} points. Tu as perdu, tu as plus de 21 points.`);
+                }
             }
         } else {
             if (previousCardPoints + currentCardPoints > 21) {

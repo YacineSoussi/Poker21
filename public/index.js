@@ -41,8 +41,7 @@ let checkStateMode = false;
  function start() {
     startID.classList.add("d-none");
     spinnerLoadingID.classList.remove("d-none");
-
-    deck.getDeckData()
+    deck.getNewDeck()
         .then(data => {
             if (data) {
                 cardsConfig = {...data};
@@ -65,7 +64,7 @@ let checkStateMode = false;
 function finish(finish = false) {
     if (!gameIsFinish) {
         if (finish) {
-            gameIsFinish = true;
+            finishGame();
             alert(`Tu as gagné, tu as 21 points.`);
         } else {
             if (!checkStateMode) {
@@ -74,9 +73,11 @@ function finish(finish = false) {
                 pullCard();
                 user.verifyUserWinning(currentCardPoints - nextCardPoints, nextCardPoints, false);
                 checkStateMode = false;
-                gameIsFinish = true;
+                finishGame();
             }
         }
+
+
     }
 }
 
@@ -101,11 +102,18 @@ function pullCard(finish = false) {
                     if (data.cards?.length) {
                         currentCard = {...data.cards[0]};
                         cardsConfig.remaining = data.remaining;
+
                         addCard(currentCard);
+
+                        if(cardsConfig.remaining === 0) {
+                            finishGame();
+                            user.verifyUserWinning(currentCardPoints, -1);
+                        }
+
                         nextCardPoints = (currentCard) ? card.getCardPoints(currentCard) : 0;
 
                         if (finish) {
-                            gameIsFinish = true;
+                            finishGame();
                             user.verifyUserWinning(currentCardPoints - nextCardPoints, nextCardPoints);
                         }
                     }
@@ -169,6 +177,17 @@ function addCard(currentCard) {
             finish(true);
         }
     }
+}
+
+/**
+ * Finish the game
+ * - Disable elements in DOM
+ */
+function finishGame() {
+    finishID.classList.add("d-none");
+    pullID.classList.add("d-none");
+    checkID.classList.add("d-none");
+    gameIsFinish = true;
 }
 
 /*** Events ***/

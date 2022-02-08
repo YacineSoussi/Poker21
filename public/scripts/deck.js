@@ -2,11 +2,11 @@ class Deck {
     constructor() {}
 
     /**
-     * Get deck data
+     * Get new deck data
      * - { deck_id: null, remaining: null, shuffled: null, success: null }
      * @returns Deck data object
      */
-    getDeckData() {
+    getNewDeck() {
         return fetch("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
             .then(response => {
                 if (response.ok) {
@@ -22,6 +22,7 @@ class Deck {
 
     /**
      * Get deck
+     * - { cards: null, deck_id: null, remaining: null, success: null }
      * @param {number} id Deck ID
      * @returns Deck data object
      */
