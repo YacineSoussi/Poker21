@@ -26,6 +26,7 @@ let currentCardPoints = 0;
 let nextCardPoints = null;
 let pulledCardCount = -1;
 let currentCard = {};
+let previousCheckCard = {};
 
 // other properties
 let gameIsFinish = false;
@@ -131,18 +132,24 @@ function pullCard(finish = false) {
  * Check if next card will be make user winning or losing
  */
 function checkNextCardWinning() {
-    if (!gameIsFinish && cardsConfig.remaining >= 0 && !checkStateMode) {
-        deck.getDeck(cardsConfig.deck_id)
-            .then(data => {
-                currentCard = {...data.cards[0]};
-                cardsConfig.remaining = data.remaining;
-                nextCardPoints = card.getCardPoints(currentCard);
-                user.verifyUserWinning(currentCardPoints, nextCardPoints, true);
-                checkStateMode = true;
-            })
-            .catch(err => {
-                throw new Error(err);
-            })
+    if (!gameIsFinish && cardsConfig.remaining >= 0) {
+        if (!checkStateMode) {
+            deck.getDeck(cardsConfig.deck_id)
+                .then(data => {
+                    currentCard = {...data.cards[0]};
+                    previousCheckCard = {...currentCard};
+                    cardsConfig.remaining = data.remaining;
+                    nextCardPoints = card.getCardPoints(currentCard);
+                    user.verifyUserWinning(currentCardPoints, nextCardPoints, true);
+                    checkStateMode = true;
+                })
+                .catch(err => {
+                    throw new Error(err);
+                })
+        } else {
+            nextCardPoints = card.getCardPoints(previousCheckCard);
+            user.verifyUserWinning(currentCardPoints, nextCardPoints, true);
+        }
     }
 }
 
