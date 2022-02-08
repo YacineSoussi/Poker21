@@ -19,18 +19,17 @@ const deck = new Deck();
 const card = new Card();
 const user = new User();
 
-// cards properties
-let cardsConfig = {};
-let cardsRow = 0;
-let currentCardPoints = 0;
-let nextCardPoints = null;
-let pulledCardCount = -1;
-let currentCard = {};
-let previousCheckCard = {};
-
-// other properties
-let gameIsFinish = false;
-let checkStateMode = false;
+// properties
+let cardsConfig,
+    cardsRow,
+    currentCardPoints,
+    nextCardPoints,
+    pulledCardCount,
+    currentCard,
+    previousCheckCard,
+    gameStarting,
+    gameIsFinish,
+    checkStateMode;
 
 /*** Functions ***/
 
@@ -39,17 +38,16 @@ let checkStateMode = false;
  * - Loading cards
  * - Enable or disable DOM elements
  */
- function start() {
+function start() {
+    initVariables();
     startID.classList.add("d-none");
     spinnerLoadingID.classList.remove("d-none");
+
     deck.getNewDeck()
         .then(data => {
             if (data) {
-                cardsConfig = {...data};
-                localStorage.setItem("cardsConfig", JSON.stringify(cardsConfig));
-                mainID.classList.remove("hidden");
-                spinnerLoadingID.classList.add("d-none");
-                card.updateMissingCards(cardsConfig.remaining, missingCardsID);
+                setCardConfig(data);
+                gameStarting = true;
             }
         })
         .catch(error => {
@@ -82,11 +80,33 @@ function finish(finish = false) {
 
 /**
  * Retry the game
+ * - Remove or display DOM elements
+ * - Shuffle deck
  */
 function retry() {
     retryID.classList.add("d-none");
     finishID.classList.add("d-none");
-    location.reload(); // TODO search another way to reload everything without reload if possible
+    checkID.classList.add("d-none");
+    spinnerLoadingID.classList.remove("d-none");
+    mainID.classList.add("hidden");
+    pullID.classList.remove("d-none");
+
+    deck.shuffleDeck(cardsConfig.deck_id)
+        .then(data => {
+            if (data) {
+                initVariables();
+                deckID.innerHTML = ''; // clear all children
+                currentCardID.innerHTML = 'Aucune carte tirée ...';
+                cardPointsID.innerHTML = '0';
+                cardPointsID.setAttribute("value", '0');
+                missingCardsID.innerHTML = '';
+                setCardConfig(data);
+                gameStarting = true;
+            }
+        })
+        .catch(err => {
+            throw new Error(err);
+        });
 }
 
 /**
@@ -94,7 +114,7 @@ function retry() {
  * @param {boolean} finish Force finish of the game
  */
 function pullCard(finish = false) {
-    if (Object.entries(cardsConfig).length > 0 && !gameIsFinish) {
+    if (gameStarting && Object.entries(cardsConfig).length > 0 && !gameIsFinish) {
         if (!checkStateMode) {
             deck.getDeck(cardsConfig.deck_id)
                 .then(data => {
@@ -192,7 +212,34 @@ function finishGame() {
     finishID.classList.add("d-none");
     pullID.classList.add("d-none");
     checkID.classList.add("d-none");
-    gameIsFinish = true;
+}
+
+/**
+ * Set card config
+ * @param {object} data Card config properties
+ */
+function setCardConfig(data) {
+    cardsConfig = {...data};
+    localStorage.setItem("cardsConfig", JSON.stringify(cardsConfig));
+    mainID.classList.remove("hidden");
+    spinnerLoadingID.classList.add("d-none");
+    card.updateMissingCards(cardsConfig.remaining, missingCardsID);
+}
+
+/**
+ * Init variables
+ */
+function initVariables() {
+    cardsConfig = {};
+    cardsRow = 0;
+    currentCardPoints = 0;
+    nextCardPoints = null;
+    pulledCardCount = -1;
+    currentCard = {};
+    previousCheckCard = {};
+    gameStarting = false;
+    gameIsFinish = false;
+    checkStateMode = false;
 }
 
 /*** Events ***/

@@ -41,4 +41,25 @@ class Deck {
             })
     }
 
+
+    /**
+     * Shuffle the deck
+     * - { cards: null, deck_id: null, remaining: null, success: null }
+     * @param {number} id Deck ID
+     * @returns Deck data objects
+     */
+    shuffleDeck(id) {
+        return fetch(`https://deckofcardsapi.com/api/deck/${id}/shuffle/`)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Response is not valid")
+                }
+            })
+            .then(data => data)
+            .catch(error => {
+                throw new Error(error);
+            })
+    }
 }
