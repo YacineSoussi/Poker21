@@ -1,57 +1,43 @@
 class Deck {
-    constructor() {
-        this.cards = [];
-    }
+    constructor() {}
 
     /**
-     * Get cards data
-     * - { cards, deck_id, remaining, success }
-     * @returns Cards properties
+     * Get deck data
+     * - { deck_id: null, remaining: null, shuffled: null, success: null }
+     * @returns Deck data object
      */
-    async getCardsData() {
-        let result;
-
-        await fetch("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
+    getDeckData() {
+        return fetch("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
             .then(response => {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    throw new Error("Error during get deck object")
+                    throw new Error("Response is not valid")
                 }
-            })
-            .then(data => {
-                result = fetch(`https://deckofcardsapi.com/api/deck/${data.deck_id}/draw/?count=52`)
-                            .then(response => {
-                                if(response.ok) {
-                                    return response.json();
-                                } else {
-                                    throw new Error("Error during get deck data")
-                                }
-                            })
-                            .catch(error => {
-                                throw new Error(error);
-                            });
             })
             .catch(error => {
                 throw new Error(error);
             })
-
-        return result;
     }
 
     /**
-     * Get cards
-     * @returns Cards array
+     * Get deck
+     * @param {number} id Deck ID
+     * @returns Deck data object
      */
-    getCards() {
-        return this.cards;
+    getDeck(id) {
+        return fetch(`https://deckofcardsapi.com/api/deck/${id}/draw/?count=1`)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Response is not valid")
+                }
+            })
+            .then(data => data)
+            .catch(error => {
+                throw new Error(error);
+            })
     }
 
-    /**
-     * Set cards
-     * @param {array} cards Cards array
-     */
-    setCards(cards) {
-        this.cards = cards;
-    }
 }
