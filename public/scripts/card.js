@@ -72,7 +72,7 @@ class Card {
             case "ACE":
                 return 0;
             default:
-                return card.value;
+                return Number(card.value);
         }
     }
 }
