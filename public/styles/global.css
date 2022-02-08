@@ -44,10 +44,6 @@
     display: block;
 }
 
-.absolute {
-    position: absolute;
-}
-
 .relative {
     position: relative;
 }
