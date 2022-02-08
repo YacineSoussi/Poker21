@@ -84,22 +84,12 @@ function finish(finish = false) {
  * - Shuffle deck
  */
 function retry() {
-    retryID.classList.add("d-none");
-    finishID.classList.add("d-none");
-    checkID.classList.add("d-none");
-    spinnerLoadingID.classList.remove("d-none");
-    mainID.classList.add("hidden");
-    pullID.classList.remove("d-none");
+    resetElements();
 
     deck.shuffleDeck(cardsConfig.deck_id)
         .then(data => {
             if (data) {
                 initVariables();
-                deckID.innerHTML = ''; // clear all children
-                currentCardID.innerHTML = 'Aucune carte tirée ...';
-                cardPointsID.innerHTML = '0';
-                cardPointsID.setAttribute("value", '0');
-                missingCardsID.innerHTML = '';
                 setCardConfig(data);
                 gameStarting = true;
             }
@@ -240,6 +230,26 @@ function initVariables() {
     gameStarting = false;
     gameIsFinish = false;
     checkStateMode = false;
+}
+
+/**
+ * Reset elements
+ * - Reset class of DOM elements
+ * - Reset content of DOM elements
+ * - Reset attributes of DOM elements
+ */
+function resetElements() {
+    retryID.classList.add("d-none");
+    finishID.classList.add("d-none");
+    checkID.classList.add("d-none");
+    spinnerLoadingID.classList.remove("d-none");
+    mainID.classList.add("hidden");
+    pullID.classList.remove("d-none");
+    deckID.innerHTML = '';
+    currentCardID.innerHTML = 'Aucune carte tirée ...';
+    cardPointsID.innerHTML = '0';
+    cardPointsID.setAttribute("value", '0');
+    missingCardsID.innerHTML = '';
 }
 
 /*** Events ***/
