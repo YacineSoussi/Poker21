@@ -77,8 +77,6 @@ function finish(finish = false) {
                 finishGame();
             }
         }
-
-
     }
 }
 
