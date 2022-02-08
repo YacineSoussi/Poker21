@@ -42,7 +42,6 @@ function start() {
     initVariables();
     startID.classList.add("d-none");
     spinnerLoadingID.classList.remove("d-none");
-
     deck.getNewDeck()
         .then(data => {
             if (data) {
@@ -85,7 +84,6 @@ function finish(finish = false) {
  */
 function retry() {
     resetElements();
-
     deck.shuffleDeck(cardsConfig.deck_id)
         .then(data => {
             if (data) {
