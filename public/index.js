@@ -15,9 +15,9 @@ const missingCardsID = document.getElementById("missing-cards");
 /*** Variables ***/
 
 // instances
-const deck = Deck();
-const card = Card();
-const user = User();
+const deck = new Deck();
+const card = new Card();
+const user = new User();
 
 // properties
 let cardsConfig,
