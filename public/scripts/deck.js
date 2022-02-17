@@ -14,10 +14,7 @@ class Deck {
                 } else {
                     throw new Error("Response is not valid")
                 }
-            })
-            .catch(error => {
-                throw new Error(error);
-            })
+            });
     }
 
     /**
@@ -35,12 +32,8 @@ class Deck {
                     throw new Error("Response is not valid")
                 }
             })
-            .then(data => data)
-            .catch(error => {
-                throw new Error(error);
-            })
+            .then(data => data);
     }
-
 
     /**
      * Shuffle the deck
@@ -57,9 +50,6 @@ class Deck {
                     throw new Error("Response is not valid")
                 }
             })
-            .then(data => data)
-            .catch(error => {
-                throw new Error(error);
-            })
+            .then(data => data);
     }
 }
