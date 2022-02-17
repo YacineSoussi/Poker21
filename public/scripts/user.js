@@ -8,7 +8,7 @@ class User {
      * @param {number} currentCardPoints Current card points
      * @param {boolean} check Check mode enabled or not
      */
-    verifyUserWinning(previousCardPoints, currentCardPoints, check = false) {
+    static verifyUserWinning(previousCardPoints, currentCardPoints, check = false) {
         if (previousCardPoints > 21) {
             if (check) {
                 alert("Tu as déjà perdu, tu as plus de 21 points.");

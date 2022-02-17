@@ -7,7 +7,7 @@ class Card {
      * @param {object} card Random card
      * @returns Card number with his symbol
      */
-    getCardSymbol(card) {
+    static getCardSymbol(card) {
         const values = ["KING", "JACK", "QUEEN", "AS"];
 
         switch (card.suit) {
@@ -61,7 +61,7 @@ class Card {
      * @param {object} card Random card
      * @returns Card points
      */
-    getCardPoints(card) {
+    static getCardPoints(card) {
         switch (card.value) {
             case "KING":
                 return 10;
@@ -84,7 +84,7 @@ class Card {
      * @param {object} card Current card
      * @param {Element} deck Deck DOM element
      */
-    createCardImage(card, deck) {
+    static createCardImage(card, deck) {
         // new card and his properties
         let cardImage = document.createElement("img");
         cardImage.src = card.images.svg;
@@ -114,7 +114,7 @@ class Card {
      * @param {number} remaining Number of remaining cards
      * @param {Element} missing Missing DOM element
      */
-    updateMissingCards(remaining, missing) {
+    static updateMissingCards(remaining, missing) {
         missing.value = remaining;
         missing.setAttribute("value", missing.value);
         missing.innerHTML = missing.value;
@@ -127,7 +127,7 @@ class Card {
      * @param {number} cardPoints Current card points
      * @param {Element} card Card DOM element
      */
-    setCardPoints(cardPoints, card) {
+    static setCardPoints(cardPoints, card) {
         // update value attribute
         card.setAttribute("value", cardPoints);
 

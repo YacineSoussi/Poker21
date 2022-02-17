@@ -6,7 +6,7 @@ class Deck {
      * - { deck_id: null, remaining: null, shuffled: null, success: null }
      * @returns Deck data object
      */
-    getNewDeck() {
+    static getNewDeck() {
         return fetch("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
             .then(response => {
                 if (response.ok) {
@@ -26,7 +26,7 @@ class Deck {
      * @param {number} id Deck ID
      * @returns Deck data object
      */
-    getDeck(id) {
+    static getDeck(id) {
         return fetch(`https://deckofcardsapi.com/api/deck/${id}/draw/?count=1`)
             .then(response => {
                 if (response.ok) {
@@ -48,7 +48,7 @@ class Deck {
      * @param {number} id Deck ID
      * @returns Deck data objects
      */
-    shuffleDeck(id) {
+    static shuffleDeck(id) {
         return fetch(`https://deckofcardsapi.com/api/deck/${id}/shuffle/`)
             .then(response => {
                 if (response.ok) {
