@@ -12,7 +12,7 @@ Il doit être possible de tirer une carte depuis un deck.
 - Il ne doit pas être possible de tirer une carte après que le jeu de carte soit vide. ✅
 - Il doit être possible d’afficher le score en cours, mis à jour après chaque tirage. ✅
 - Il doit être possible d’afficher le nombre de cartes restantes, mis à jour après chaque tirage. ✅
-- Il doit être possible de tirer un nombre de cartes arbitraire à la fois.
+- Il doit être possible de tirer un nombre de cartes arbitraire à la fois. ✅
 - Il doit être possible de décider de s’arrêter pour voir si la carte suivante nous fait gagner ou perdre. ✅
 - Il doit être possible d’afficher une fenêtre modale de résultat après une victoire ou un échec.
 - Il doit être possible de pouvoir rejouer une partie après une victoire ou un échec. ✅
@@ -47,3 +47,7 @@ Il doit être possible de tirer une carte depuis un deck.
 - Le projet n’utilise aucune fonctionnalité dépréciée.
 - Le projet a une documentation pour les testeurs.
 - Le projet ne doit utiliser aucune librairie HTML, CSS ou JavaScript.
+
+# Ajout supplémentaire
+
+- Dependabot robot ✅
