@@ -33,6 +33,10 @@ div#deck {
   margin: 0 5px;
 }
 
+#card-informations #pullCount {
+  width: 35px;
+}
+
 /*** Spinner ***/
 
 .spinner-loading {

@@ -21,10 +21,11 @@ class Deck {
      * Get deck
      * - { cards: null, deck_id: null, remaining: null, success: null }
      * @param {number} id Deck ID
+     * @param {string} count Cards count
      * @returns Deck data object
      */
-    getDeck(id) {
-        return fetch(`https://deckofcardsapi.com/api/deck/${id}/draw/?count=1`)
+    getDeck(id, count) {
+        return fetch(`https://deckofcardsapi.com/api/deck/${id}/draw/?count=${count}`)
             .then(response => {
                 if (response.ok) {
                     return response.json();
