@@ -94,7 +94,7 @@ function retry() {
  */
 function getDeck(count, finish = false) {
     if (gameStarting && Object.entries(cardsConfig).length > 0 && !gameIsFinish) {
-        deck.getDeck(cardsConfig.deck_id, count)
+        deck.getDeck("dldld", count)
             .then(data => {
                 if (data.cards?.length) {
                     this.updateRemainingCards(data.remaining);
@@ -109,6 +109,7 @@ function getDeck(count, finish = false) {
                 }
             })
             .catch(err => {
+                alert("Une erreur est survenu lors du tirage des cartes !");
                 throw new Error(err);
             });
     }

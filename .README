@@ -21,7 +21,7 @@ Il doit être possible de tirer une carte depuis un deck.
 - Il doit y avoir des animations affichées lorsqu’une carte est tirée et posée sur le tas.
 - Il doit y avoir une animation des cartes lorsque le joueur gagne une partie.
 - Il doit y avoir une animation des cartes lorsque le joueur perd une partie.
-- Il doit être possible d’avoir un message d’erreur lorsqu’une erreur survient lors d’un tirage de carte.
+- Il doit être possible d’avoir un message d’erreur lorsqu’une erreur survient lors d’un tirage de carte. ✅
 - Il doit être possible de pouvoir tirer de nouveau une carte lorsqu’une erreur réseau survient.
 - Il doit être possible d’annuler le tirage d’une carte en cours de requête.
 - Il ne doit pas être possible de tirer une nouvelle carte si une carte est déjà en cours de tirage.
