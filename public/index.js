@@ -4,13 +4,15 @@ const startID = document.getElementById("start");
 const retryID = document.getElementById("retry");
 const pullID = document.querySelector(".pull");
 const finishID = document.getElementById("finish");
-const checkID = document.getElementById("check");
 const mainID = document.getElementById("main");
 const currentCardID = document.getElementById("card-pulled");
 const cardPointsID = document.getElementById("card-points");
 const spinnerLoadingID = document.getElementById("spinner-block");
 const deckID = document.getElementById("deck");
 const missingCardsID = document.getElementById("missing-cards");
+const pullsID = document.getElementById("pulls");
+const pullCardID = document.getElementById("pullCard");
+const pullCount = document.getElementById("pullCount");
 
 /*** Variables ***/
 
@@ -21,15 +23,10 @@ const user = new User();
 
 // properties
 let cardsConfig,
-    cardsRow,
     currentCardPoints,
-    nextCardPoints,
     pulledCardCount,
-    currentCard,
-    previousCheckCard,
     gameStarting,
-    gameIsFinish,
-    checkStateMode;
+    gameIsFinish;
 
 /*** Functions ***/
 
@@ -65,14 +62,7 @@ function finish(finish = false) {
             alert(`Tu as gagné, tu as 21 points.`);
             finishGame();
         } else {
-            if (!checkStateMode) {
-                pullCard(true);
-            } else {
-                pullCard();
-                user.verifyUserWinning(currentCardPoints - nextCardPoints, nextCardPoints, false);
-                checkStateMode = false;
-                finishGame();
-            }
+            getDeck(1, true);
         }
     }
 }
@@ -98,10 +88,11 @@ function retry() {
 }
 
 /**
- * Pull a card from deck
+ * Get deck
+ * @param {number} count Cards count
  * @param {boolean} finish Force finish of the game
  */
-function pullCard(finish = false) {
+function getDeck(count, finish = false) {
     if (gameStarting && Object.entries(cardsConfig).length > 0 && !gameIsFinish) {
         if (!checkStateMode) {
             deck.getDeck(cardsConfig.deck_id)
@@ -125,17 +116,13 @@ function pullCard(finish = false) {
                         }
                     }
                 })
-                .catch(err => {
-                    throw new Error(err);
-                });
-        } else {
-            addCard(currentCard);
         }
     }
 }
 
 /**
- * Check if next card will be make user winning or losing
+ * Update remaining of cards
+ * @param {number} remaining Cards remaining
  */
 function checkNextCardWinning() {
     if (!gameIsFinish && cardsConfig.remaining >= 0) {
@@ -159,37 +146,70 @@ function checkNextCardWinning() {
     }
 }
 
+function updateRemainingCards(remaining) {
+    cardsConfig.remaining = remaining;
+    pullCount.setAttribute("max", remaining);
+}
+
 /**
  * Add a card
  * - Make all logic
- * - Add card to DOM
- * @param {object} currentCard Current card
+ * - Add cards to DOM
+ * @param {object} cards Cards list
+ * @param {number} count Cards count
+ * @param {boolean} finish Force finish of the game
  */
-function addCard(currentCard) {
-    if (!gameIsFinish && cardsConfig.remaining >= 0) {
+function addCard(cards, count, finish = false) {
+    if (!gameIsFinish) {
         finishID.classList.remove("d-none");
-        checkID.classList.remove("d-none");
         retryID.classList.remove("d-none");
+        pullCardID.classList.remove("d-none");
 
-        // display card pulled in DOM (symbol + value)
-        currentCardID.innerHTML = card.getCardSymbol(currentCard);
+        if (count === 1) {
+            addCardOperations(cards[0], finish);
+        } else if (count > 1) {
+            for (let index = 0; index < count; index++) {
+                setTimeout(() => {
+                    addCardOperations(cards[index], true);
+                }, 1000 + (1500 * index));
+            }
 
-        // update card points
-        currentCardPoints = (currentCardPoints) ?
-            currentCardPoints + card.getCardPoints(currentCard) :
-            card.getCardPoints(currentCard);
-
-        card.setCardPoints(currentCardPoints, cardPointsID);
-        card.updateMissingCards(cardsConfig.remaining, missingCardsID);
-        card.createCardImage(currentCard, deckID);
-
-        checkStateMode = false;
-
-        // user have 21 points
-        if (currentCardPoints === 21) {
-            finish(true);
+            // update card points
+            currentCardPoints = (currentCardPoints) ?
+                currentCardPoints + card.getCardPoints(currentCard) :
+                card.getCardPoints(currentCard);
+            if (currentCardPoints > 21) {
+                alert("Tu as perdu, réessaie !");
+                finishGame();
+            }
         }
     }
+}
+
+/**
+ * Make all operations of addCard main method
+ * @param {array} cards Cards list
+ * @param {boolean} finish Force finish of the game
+ */
+function addCardOperations(cards, finish = false) {
+    // display card pulled in DOM (symbol + value)
+    currentCardID.innerHTML = card.getCardSymbol((cards.length > 0) ? cards[index] : cards);
+
+    // update card points
+    currentCardPoints = (currentCardPoints) ?
+        currentCardPoints + card.getCardPoints((cards.length > 0) ? cards[index] : cards) :
+        card.getCardPoints((cards.length > 0) ? cards[index] : cards);
+
+    if (currentCardPoints > 21 && !finish) {
+        alert("Tu as perdu, réessaie !");
+        finishGame();
+    }
+
+    if (currentCardPoints === 21) finish(true);
+
+    card.setCardPoints(currentCardPoints, cardPointsID);
+    card.updateMissingCards(cardsConfig.remaining, missingCardsID);
+    createCardImage((cards.length > 0) ? cards[index] : cards, deckID);
 }
 
 /**
@@ -199,7 +219,7 @@ function addCard(currentCard) {
 function finishGame() {
     finishID.classList.add("d-none");
     pullID.classList.add("d-none");
-    checkID.classList.add("d-none");
+    pullCardID.classList.add("d-none");
 }
 
 /**
@@ -219,15 +239,10 @@ function setCardConfig(data) {
  */
 function initVariables() {
     cardsConfig = {};
-    cardsRow = 0;
     currentCardPoints = 0;
-    nextCardPoints = null;
     pulledCardCount = -1;
-    currentCard = {};
-    previousCheckCard = {};
     gameStarting = false;
     gameIsFinish = false;
-    checkStateMode = false;
 }
 
 /**
@@ -239,7 +254,6 @@ function initVariables() {
 function resetElements() {
     retryID.classList.add("d-none");
     finishID.classList.add("d-none");
-    checkID.classList.add("d-none");
     spinnerLoadingID.classList.remove("d-none");
     mainID.classList.add("hidden");
     pullID.classList.remove("d-none");
@@ -280,24 +294,38 @@ finishID.addEventListener("click", function() {
 });
 
 /**
- * Event trigger to pull a card
+ * Event trigger to pull one card
  */
 pullID.addEventListener("click", function() {
-    pullCard();
+    getDeck(1);
+});
+
+/**
+ * Event trigger to pull multiple cards
+ */
+pullsID.addEventListener("click", function() {
+    const value = Number(document.getElementById("pullCount").value);
+    const maxAttributeValue = Number(pullCount.getAttribute("max"));
+
+    if (value) {
+        if (value < maxAttributeValue) {
+            getDeck(value);
+        } else {
+            alert(`Tu ne peux pas tirer plus de ${maxAttributeValue} cartes !`);
+        }
+
+        pullCount.value = 0;
+    }
 });
 
 /**
  * Event trigger when user press letter "d" in keyboard
  */
-document.addEventListener("keypress", function onEvent(event) {
-    if (event.key.toLowerCase() === 'd') {
-        pullCard();
-    }
-});
-
-/**
- * Event trigger to check if next card will be make user winning or losing
- */
 checkID.addEventListener("click", function() {
     checkNextCardWinning();
+});
+document.addEventListener("keypress", function onEvent(event) {
+    if (event.key.toLowerCase() === 'd') {
+        getDeck(1);
+    }
 });

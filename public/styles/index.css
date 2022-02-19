@@ -65,6 +65,12 @@ div#deck {
     margin: 0 5px;
 }
 
+<<<<<<< HEAD
+=======
+#card-informations #pullCount {
+  width: 35px;
+}
+>>>>>>> 32f6dc899261db44a4ecd323d50ea07b746e07da
 
 /*** Spinner ***/
 

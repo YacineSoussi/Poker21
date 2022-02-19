@@ -77,6 +77,7 @@ class Card {
     }
 
     /**
+<<<<<<< HEAD
      * Create card image in DOM
      * - Initialize DOM element
      * - Set properties
@@ -110,6 +111,8 @@ class Card {
     }
 
     /**
+=======
+>>>>>>> 32f6dc899261db44a4ecd323d50ea07b746e07da
      * Update missing cards property data
      * @param {number} remaining Number of remaining cards
      * @param {Element} missing Missing DOM element

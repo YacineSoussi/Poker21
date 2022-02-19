@@ -12,6 +12,7 @@ class Deck {
                 if (!response.ok) {
                     throw new Error("Response is not valid")
                 }
+<<<<<<< HEAD
                 return response.json();
             })
             .then(r => {
@@ -21,16 +22,20 @@ class Deck {
             .catch(error => {
                 throw new Error(error);
             })
+=======
+            });
+>>>>>>> 32f6dc899261db44a4ecd323d50ea07b746e07da
     }
 
     /**
      * Get deck
      * - { cards: null, deck_id: null, remaining: null, success: null }
      * @param {number} id Deck ID
+     * @param {string} count Cards count
      * @returns Deck data object
      */
-    getDeck(id) {
-        return fetch(`https://deckofcardsapi.com/api/deck/${id}/draw/?count=1`)
+    getDeck(id, count) {
+        return fetch(`https://deckofcardsapi.com/api/deck/${id}/draw/?count=${count}`)
             .then(response => {
                 if (response.ok)  {
                     return response.json();
@@ -38,12 +43,8 @@ class Deck {
                     throw new Error("Response is not valid")
                 }
             })
-            .then(data => data)
-            .catch(error => {
-                throw new Error(error);
-            })
+            .then(data => data);
     }
-
 
     /**
      * Shuffle the deck
@@ -60,9 +61,6 @@ class Deck {
                     throw new Error("Response is not valid")
                 }
             })
-            .then(data => data)
-            .catch(error => {
-                throw new Error(error);
-            })
+            .then(data => data);
     }
 }

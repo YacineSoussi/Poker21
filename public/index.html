@@ -24,6 +24,7 @@
     <h1 class="title text-center">Poker 21 !</h1>
     <button id="start" class="d-block m-auto">Commencer la partie</button>
 
+<<<<<<< HEAD
     <!-- Spinner -->
     <div id="spinner-block" class="d-none d-flex justify-center flex-column align-center mt-2 mb-2">
         <p>Chargement des cartes ...</p>
@@ -51,6 +52,35 @@
             <div>
                 <span>Nombre de points : </span>
                 <span id="card-points" value="0">0</span>
+=======
+            <!-- Main -->
+            <div id="main" class="hidden">
+                <div id="deck" class="m-auto relative"></div>
+                <div id="buttons" class="d-flex justify-center text-center">
+                    <button id="retry" class="d-none">Recommencer</button>
+                    <button id="finish" class="d-none">Terminer</button>
+                    <button id="pull">Tirer</button>
+                </div>
+                <div id="card-informations" class="text-center">
+                    <div>
+                        <span>Carte tirée : </span>
+                        <span id="card-pulled">Aucune carte tirée ...</span>
+                    </div>
+                    <div>
+                        <span>Nombre de points : </span>
+                        <span id="card-points" value="0">0</span>
+                    </div>
+                    <div>
+                        <span>Nombre de cartes manquantes : </span>
+                        <span id="missing-cards"></span>
+                    </div>
+                    <div id="pullCard">
+                        <label for="pullCount">Tirer plusieurs cartes</label>
+                        <input type="number" min="0" max="52" value="0" id="pullCount">
+                        <input type="button" value="Tirer" id="pulls">
+                    </div>
+                </div>
+>>>>>>> 32f6dc899261db44a4ecd323d50ea07b746e07da
             </div>
             <div>
                 <span>Nombre de cartes manquantes : </span>

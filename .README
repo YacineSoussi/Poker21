@@ -12,7 +12,7 @@ Il doit être possible de tirer une carte depuis un deck.
 - Il ne doit pas être possible de tirer une carte après que le jeu de carte soit vide. ✅
 - Il doit être possible d’afficher le score en cours, mis à jour après chaque tirage. ✅
 - Il doit être possible d’afficher le nombre de cartes restantes, mis à jour après chaque tirage. ✅
-- Il doit être possible de tirer un nombre de cartes arbitraire à la fois.
+- Il doit être possible de tirer un nombre de cartes arbitraire à la fois. ✅
 - Il doit être possible de décider de s’arrêter pour voir si la carte suivante nous fait gagner ou perdre. ✅
 - Il doit être possible d’afficher une fenêtre modale de résultat après une victoire ou un échec.
 - Il doit être possible de pouvoir rejouer une partie après une victoire ou un échec. ✅
@@ -21,7 +21,7 @@ Il doit être possible de tirer une carte depuis un deck.
 - Il doit y avoir des animations affichées lorsqu’une carte est tirée et posée sur le tas.
 - Il doit y avoir une animation des cartes lorsque le joueur gagne une partie.
 - Il doit y avoir une animation des cartes lorsque le joueur perd une partie.
-- Il doit être possible d’avoir un message d’erreur lorsqu’une erreur survient lors d’un tirage de carte.
+- Il doit être possible d’avoir un message d’erreur lorsqu’une erreur survient lors d’un tirage de carte. ✅
 - Il doit être possible de pouvoir tirer de nouveau une carte lorsqu’une erreur réseau survient.
 - Il doit être possible d’annuler le tirage d’une carte en cours de requête.
 - Il ne doit pas être possible de tirer une nouvelle carte si une carte est déjà en cours de tirage.
