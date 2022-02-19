@@ -9,11 +9,14 @@ class Deck {
     getNewDeck() {
         return fetch("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
             .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
+                if (!response.ok) {
                     throw new Error("Response is not valid")
                 }
+                return response.json();
+            })
+            .then(r => {
+                console.log(r);
+                return r
             })
             .catch(error => {
                 throw new Error(error);
@@ -29,7 +32,7 @@ class Deck {
     getDeck(id) {
         return fetch(`https://deckofcardsapi.com/api/deck/${id}/draw/?count=1`)
             .then(response => {
-                if (response.ok) {
+                if (response.ok)  {
                     return response.json();
                 } else {
                     throw new Error("Response is not valid")

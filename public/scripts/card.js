@@ -88,10 +88,10 @@ class Card {
         // new card and his properties
         let cardImage = document.createElement("img");
         cardImage.src = card.images.svg;
-        cardImage.classList.add("defaultCardStyle ");
+        cardImage.classList.add("defaultCardStyle");
 
         // increase pulled card count
-        pulledCardCount ++;
+        pulledCardCount++;
 
         // increase margin between each cards in each pull
         if (pulledCardCount > 0) {
@@ -100,7 +100,7 @@ class Card {
 
         // create a second row for other cards
         if (pulledCardCount > 25) {
-            cardsRow ++;
+            cardsRow++;
             cardImage.style.top = "100px";
             cardImage.style.left = JSON.stringify(cardsRow * 15) + "px";
         }

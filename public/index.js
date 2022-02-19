@@ -2,7 +2,7 @@
 
 const startID = document.getElementById("start");
 const retryID = document.getElementById("retry");
-const pullID = document.getElementById("pull");
+const pullID = document.querySelector(".pull");
 const finishID = document.getElementById("finish");
 const checkID = document.getElementById("check");
 const mainID = document.getElementById("main");
@@ -62,8 +62,8 @@ function start() {
 function finish(finish = false) {
     if (!gameIsFinish) {
         if (finish) {
-            finishGame();
             alert(`Tu as gagné, tu as 21 points.`);
+            finishGame();
         } else {
             if (!checkStateMode) {
                 pullCard(true);
@@ -106,13 +106,13 @@ function pullCard(finish = false) {
         if (!checkStateMode) {
             deck.getDeck(cardsConfig.deck_id)
                 .then(data => {
-                    if (data.cards?.length) {
-                        currentCard = {...data.cards[0]};
+                    if (data.cards && data.cards.length) {
+                        currentCard = {...data.cards[0] };
                         cardsConfig.remaining = data.remaining;
 
                         addCard(currentCard);
 
-                        if(cardsConfig.remaining === 0) {
+                        if (cardsConfig.remaining === 0) {
                             finishGame();
                             user.verifyUserWinning(currentCardPoints, -1);
                         }
@@ -142,8 +142,8 @@ function checkNextCardWinning() {
         if (!checkStateMode) {
             deck.getDeck(cardsConfig.deck_id)
                 .then(data => {
-                    currentCard = {...data.cards[0]};
-                    previousCheckCard = {...currentCard};
+                    currentCard = {...data.cards[0] };
+                    previousCheckCard = {...currentCard };
                     cardsConfig.remaining = data.remaining;
                     nextCardPoints = card.getCardPoints(currentCard);
                     user.verifyUserWinning(currentCardPoints, nextCardPoints, true);
@@ -176,8 +176,8 @@ function addCard(currentCard) {
 
         // update card points
         currentCardPoints = (currentCardPoints) ?
-                                currentCardPoints + card.getCardPoints(currentCard) :
-                                    card.getCardPoints(currentCard);
+            currentCardPoints + card.getCardPoints(currentCard) :
+            card.getCardPoints(currentCard);
 
         card.setCardPoints(currentCardPoints, cardPointsID);
         card.updateMissingCards(cardsConfig.remaining, missingCardsID);
@@ -207,7 +207,7 @@ function finishGame() {
  * @param {object} data Card config properties
  */
 function setCardConfig(data) {
-    cardsConfig = {...data};
+    cardsConfig = {...data };
     localStorage.setItem("cardsConfig", JSON.stringify(cardsConfig));
     mainID.classList.remove("hidden");
     spinnerLoadingID.classList.add("d-none");
@@ -243,11 +243,17 @@ function resetElements() {
     spinnerLoadingID.classList.remove("d-none");
     mainID.classList.add("hidden");
     pullID.classList.remove("d-none");
-    deckID.innerHTML = '';
+    removeCurrentCards();
     currentCardID.innerHTML = 'Aucune carte tirée ...';
     cardPointsID.innerHTML = '0';
     cardPointsID.setAttribute("value", '0');
     missingCardsID.innerHTML = '';
+}
+
+function removeCurrentCards() {
+    document.querySelectorAll('.defaultCardStyle').forEach(element => {
+        element.remove();
+    });
 }
 
 /*** Events ***/
