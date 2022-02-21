@@ -1,3 +1,7 @@
+/*** DOM loaded ****/
+
+window.addEventListener("load", () => getNetworkStatus());
+
 /*** DOM elements ***/
 
 const startID = document.getElementById("start");
@@ -256,35 +260,50 @@ function createCardImage(card, deck) {
     deck.appendChild(cardImage);
 }
 
+/**
+ * Get navigator status
+ * - Online ==> true
+ * - Offline ==> false
+ * @returns True or false
+ */
+function getNavigatorStatus() {
+    return window.navigator.onLine;
+}
+
+/**
+ * Get network status
+ * - Change DOM according to network status
+ */
+function getNetworkStatus() {
+    const statusDisplay = document.getElementById("status");
+
+    statusDisplay.innerHTML = (`
+        <p class="${(getNavigatorStatus()) ? "green" : "red"} mr-2"</p>
+        <p> ${statusDisplay.textContent = (getNavigatorStatus()) ? "Online" : "Offline"}</p>
+    `);
+}
+
 /*** Events ***/
 
 /**
  * Event trigger to start the game
  */
-startID.addEventListener("click", function() {
-    start();
-});
+startID.addEventListener("click", () => start());
 
 /**
  * Event trigger to retry the game
  */
-retryID.addEventListener("click", function() {
-    retry();
-});
+retryID.addEventListener("click", () => retry());
 
 /**
  * Event trigger finish the game
  */
-finishID.addEventListener("click", function() {
-    finish();
-});
+finishID.addEventListener("click", () => finish());
 
 /**
  * Event trigger to pull one card
  */
-pullID.addEventListener("click", function() {
-    getDeck(1);
-});
+pullID.addEventListener("click", () => getDeck(1));
 
 /**
  * Event trigger to pull multiple cards
@@ -312,3 +331,7 @@ document.addEventListener("keypress", function onEvent(event) {
         getDeck(1);
     }
 });
+
+/*** Others ***/
+
+setInterval(() => getNetworkStatus(), 30000);
