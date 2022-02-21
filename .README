@@ -18,7 +18,7 @@ Il doit être possible de tirer une carte depuis un deck.
 - Il doit être possible de pouvoir rejouer une partie après une victoire ou un échec. ✅
 - Il doit être possible de recommencer une nouvelle partie pendant une partie en cours. ✅
 - Il ne doit pas être possible de pouvoir recommencer avant d’avoir tiré au moins une carte. ✅
-- Il doit y avoir des animations affichées lorsqu’une carte est tirée et posée sur le tas.
+- Il doit y avoir des animations affichées lorsqu’une carte est tirée et posée sur le tas. ✅
 - Il doit y avoir une animation des cartes lorsque le joueur gagne une partie.
 - Il doit y avoir une animation des cartes lorsque le joueur perd une partie.
 - Il doit être possible d’avoir un message d’erreur lorsqu’une erreur survient lors d’un tirage de carte. ✅

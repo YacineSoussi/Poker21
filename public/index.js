@@ -130,26 +130,21 @@ function updateRemainingCards(remaining) {
  * - Add cards to DOM
  * @param {object} cards Cards list
  * @param {number} count Cards count
- * @param {boolean} finish Force finish of the game
+ * @param {boolean} isFinish Force finish of the game
  */
-function addCard(cards, count, finish = false) {
+function addCard(cards, count, isFinish = false) {
     if (!gameIsFinish) {
         finishID.classList.remove("d-none");
         retryID.classList.remove("d-none");
         pullCardID.classList.remove("d-none");
 
         if (count === 1) {
-            addCardOperations(cards[0], finish);
+            addCardOperations(cards[0], isFinish);
         } else if (count > 1) {
             for (let index = 0; index < count; index++) {
                 setTimeout(() => {
                     addCardOperations(cards[index], true);
                 }, 1000 + (1500 * index));
-            }
-
-            if (currentCardPoints > 21) {
-                alert("Tu as perdu, réessaie !");
-                finishGame();
             }
         }
     }
@@ -158,27 +153,31 @@ function addCard(cards, count, finish = false) {
 /**
  * Make all operations of addCard main method
  * @param {array} cards Cards list
- * @param {boolean} finish Force finish of the game
+ * @param {boolean} isFinish Force finish of the game
  */
-function addCardOperations(cards, finish = false) {
-    // display card pulled in DOM (symbol + value)
-    currentCardID.innerHTML = card.getCardSymbol((cards.length > 0) ? cards[index] : cards);
+function addCardOperations(cards, isFinish = false) {
+    if (!gameIsFinish) {
+        // display card pulled in DOM (symbol + value)
+        currentCardID.innerHTML = card.getCardSymbol((cards.length > 0) ? cards[index] : cards);
 
-    // update card points
-    currentCardPoints = (currentCardPoints) ?
-                            currentCardPoints + card.getCardPoints((cards.length > 0) ? cards[index] : cards) :
-                                card.getCardPoints((cards.length > 0) ? cards[index] : cards);
+        // update card points
+        currentCardPoints = (currentCardPoints) ?
+                                currentCardPoints + card.getCardPoints((cards.length > 0) ? cards[index] : cards) :
+                                    card.getCardPoints((cards.length > 0) ? cards[index] : cards);
 
-    if (currentCardPoints > 21 && !finish) {
-        alert("Tu as perdu, réessaie !");
-        finishGame();
+        if (currentCardPoints > 21) {
+            alert("Tu as perdu, réessaie !");
+            finishGame();
+        }
+
+        if (currentCardPoints === 21) {
+            finish(true)
+        }
+
+        card.setCardPoints(currentCardPoints, cardPointsID);
+        card.updateMissingCards(cardsConfig.remaining, missingCardsID);
+        createCardImage((cards.length > 0) ? cards[index] : cards, deckID);
     }
-
-    if (currentCardPoints === 21) finish(true);
-
-    card.setCardPoints(currentCardPoints, cardPointsID);
-    card.updateMissingCards(cardsConfig.remaining, missingCardsID);
-    createCardImage((cards.length > 0) ? cards[index] : cards, deckID);
 }
 
 /**
@@ -187,8 +186,8 @@ function addCardOperations(cards, finish = false) {
  */
 function finishGame() {
     finishID.classList.add("d-none");
-    pullID.classList.add("d-none");
     pullCardID.classList.add("d-none");
+    gameIsFinish = true;
 }
 
 /**
@@ -225,9 +224,8 @@ function resetElements() {
     finishID.classList.add("d-none");
     spinnerLoadingID.classList.remove("d-none");
     mainID.classList.add("hidden");
-    pullID.classList.remove("d-none");
     pullCardID.classList.remove("d-none");
-    deckID.innerHTML = '';
+    document.querySelectorAll('.defaultCardStyle').forEach(node => node.remove());
     currentCardID.innerHTML = 'Aucune carte tirée ...';
     cardPointsID.innerHTML = '0';
     cardPointsID.setAttribute("value", '0');
