@@ -98,7 +98,7 @@ function getDeck(count, finish = false) {
             .then(data => {
                 if (data.cards?.length) {
                     this.updateRemainingCards(data.remaining);
-                    addCard(data.cards, count, (finish) ? true : false);
+                    addCard(data.cards, count);
 
                     if (finish) {
                         const currentCard = {...data.cards[0]};
@@ -130,20 +130,19 @@ function updateRemainingCards(remaining) {
  * - Add cards to DOM
  * @param {object} cards Cards list
  * @param {number} count Cards count
- * @param {boolean} isFinish Force finish of the game
  */
-function addCard(cards, count, isFinish = false) {
+function addCard(cards, count) {
     if (!gameIsFinish) {
         finishID.classList.remove("d-none");
         retryID.classList.remove("d-none");
         pullCardID.classList.remove("d-none");
 
         if (count === 1) {
-            addCardOperations(cards[0], isFinish);
+            addCardOperations(cards[0]);
         } else if (count > 1) {
             for (let index = 0; index < count; index++) {
                 setTimeout(() => {
-                    addCardOperations(cards[index], true);
+                    addCardOperations(cards[index]);
                 }, 1000 + (1500 * index));
             }
         }
@@ -153,9 +152,8 @@ function addCard(cards, count, isFinish = false) {
 /**
  * Make all operations of addCard main method
  * @param {array} cards Cards list
- * @param {boolean} isFinish Force finish of the game
  */
-function addCardOperations(cards, isFinish = false) {
+function addCardOperations(cards) {
     if (!gameIsFinish) {
         // display card pulled in DOM (symbol + value)
         currentCardID.innerHTML = card.getCardSymbol((cards.length > 0) ? cards[index] : cards);
