@@ -94,7 +94,7 @@ function retry() {
  */
 function getDeck(count, finish = false) {
     if (gameStarting && Object.entries(cardsConfig).length > 0 && !gameIsFinish) {
-        deck.getDeck("dldld", count)
+        deck.getDeck(cardsConfig.deck_id, count)
             .then(data => {
                 if (data.cards?.length) {
                     this.updateRemainingCards(data.remaining);
