@@ -12,7 +12,7 @@ class Deck {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    throw new Error("Response is not valid")
+                    throw new Error("Response is not valid");
                 }
             });
     }
@@ -27,7 +27,7 @@ class Deck {
     getDeck(id, count) {
         return fetch(`https://deckofcardsapi.com/api/deck/${id}/draw/?count=${count}`)
             .then(response => {
-                if (response.ok) {
+                if (response.ok)  {
                     return response.json();
                 } else {
                     throw new Error("Response is not valid")
