@@ -29,7 +29,7 @@ Il doit être possible de tirer une carte depuis un deck.
 - Il doit y avoir un retour haptique (vibreur) lorsqu’une carte est tirée, lors d’une victoire ou d’un échec.
 - Il doit être possible de tirer une nouvelle carte en secouant l’appareil.
 - Il doit être possible de tirer une nouvelle carte lorsque la main est proche du capteur de proximité.
-- Il doit être possible de voir l’état courant du réseau (connecté, déconnecté).
+- Il doit être possible de voir l’état courant du réseau (connecté, déconnecté). ✅
 - Il doit être possible de tirer une carte en appuyant sur la touche “D” du clavier. ✅
 - Il doit être possible d’annuler le tirage d’une carte en appuyant sur la touche “C” du clavier.
 - Il doit être possible de reprendre une partie à tout moment, même après avoir fermé l’onglet.
