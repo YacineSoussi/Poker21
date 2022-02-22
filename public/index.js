@@ -319,6 +319,16 @@ function openModal(content) {
     gameInformationID.innerHTML = content;
 }
 
+/**
+ * Abort pulling of a card in process
+ */
+function abortCardPulling() {
+    pullProcessingID.classList.add("d-none");
+    cancelPullProcess = true;
+    controller.abort();
+    pullInProcess = false;
+}
+
 /*** Events ***/
 
 /**
@@ -360,23 +370,24 @@ pullsID.addEventListener("click", function() {
 });
 
 /**
- * Event trigger when user press letter "d" in keyboard
+ * Event trigger when user press a key
+ * - Case of key "d" ==> pull a card
+ * - Case of key "c" ==> abort pulling card in process
  */
 document.addEventListener("keypress", function onEvent(event) {
     if (event.key.toLowerCase() === 'd') {
         getDeck(1);
+    }
+
+    if (event.key.toLowerCase() === 'c') {
+        abortCardPulling();
     }
 });
 
 /**
  * Event trigger to abort http request during a card pulling
  */
-cancelPullID.addEventListener("click", function() {
-    pullProcessingID.classList.add("d-none");
-    cancelPullProcess = true;
-    controller.abort();
-    pullInProcess = false;
-});
+cancelPullID.addEventListener("click", () => abortCardPulling());
 
 /*** Others ***/
 
