@@ -24,7 +24,7 @@ Il doit être possible de tirer une carte depuis un deck.
 - Il doit être possible de tirer une carte en appuyant sur la touche “D” du clavier. ✅
 - Il doit être possible de pouvoir tirer de nouveau une carte lorsqu’une erreur réseau survient. ✅
 - Il doit être possible d’annuler le tirage d’une carte en cours de requête. ✅
-- Il doit être possible d’afficher une fenêtre modale de résultat après une victoire ou un échec.
+- Il doit être possible d’afficher une fenêtre modale de résultat après une victoire ou un échec. ✅
 - Les cartes doivent être affichées les unes sur les autres de manière à imiter un paquet désordonné.
 - Il doit y avoir une animation des cartes lorsque le joueur gagne une partie.
 - Il doit y avoir une animation des cartes lorsque le joueur perd une partie.
