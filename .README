@@ -25,10 +25,10 @@ Il doit être possible de tirer une carte depuis un deck.
 - Il doit être possible de pouvoir tirer de nouveau une carte lorsqu’une erreur réseau survient. ✅
 - Il doit être possible d’annuler le tirage d’une carte en cours de requête. ✅
 - Il doit être possible d’afficher une fenêtre modale de résultat après une victoire ou un échec. ✅
+- Il ne doit pas être possible de tirer une nouvelle carte si une carte est déjà en cours de tirage. ✅
 - Les cartes doivent être affichées les unes sur les autres de manière à imiter un paquet désordonné.
 - Il doit y avoir une animation des cartes lorsque le joueur gagne une partie.
 - Il doit y avoir une animation des cartes lorsque le joueur perd une partie.
-- Il ne doit pas être possible de tirer une nouvelle carte si une carte est déjà en cours de tirage.
 - Il ne doit pas être possible de s’arrêter de tirer une carte si aucune carte n’est en cours de tirage.
 - Il doit y avoir un retour haptique (vibreur) lorsqu’une carte est tirée, lors d’une victoire ou d’un échec.
 - Il doit être possible de tirer une nouvelle carte en secouant l’appareil.
