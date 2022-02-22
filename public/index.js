@@ -17,6 +17,8 @@ const missingCardsID = document.getElementById("missing-cards");
 const pullsID = document.getElementById("pulls");
 const pullCardID = document.getElementById("pullCard");
 const pullCount = document.getElementById("pullCount");
+const pullProcessing = document.getElementById("pullProcess");
+const cancelPull = document.getElementById("pullProcess");
 
 /*** Variables ***/
 
@@ -30,7 +32,10 @@ let cardsConfig,
     currentCardPoints,
     pulledCardCount,
     gameStarting,
-    gameIsFinish;
+    gameIsFinish,
+    cancelPullProcess,
+    controller,
+    signal;
 
 /*** Functions ***/
 
@@ -98,9 +103,13 @@ function retry() {
  */
 function getDeck(count, finish = false) {
     if (gameStarting && Object.entries(cardsConfig).length > 0 && !gameIsFinish) {
-        deck.getDeck(cardsConfig.deck_id, count)
+        pullProcessing.classList.remove("d-none");
+        initializeAbortController();
+
+        deck.getDeck(cardsConfig.deck_id, count, signal)
             .then(data => {
                 if (data.cards?.length) {
+                    pullProcessing.classList.add("d-none");
                     this.updateRemainingCards(data.remaining);
                     addCard(data.cards, count);
 
@@ -113,8 +122,10 @@ function getDeck(count, finish = false) {
                 }
             })
             .catch(err => {
-                alert("Une erreur est survenu lors du tirage des cartes !");
-                throw new Error(err);
+                if (!cancelPullProcess) {
+                    alert("Une erreur est survenu lors du tirage des cartes !");
+                    throw new Error(err);
+                }
             });
     }
 }
@@ -213,6 +224,7 @@ function initVariables() {
     pulledCardCount = -1;
     gameStarting = false;
     gameIsFinish = false;
+    cancelPullProcess = false;
 }
 
 /**
@@ -283,6 +295,14 @@ function getNetworkStatus() {
     `);
 }
 
+/**
+ * Initialize AbortController interface and signal object
+ */
+function initializeAbortController() {
+    controller = new AbortController();
+    signal = controller.signal;
+}
+
 /*** Events ***/
 
 /**
@@ -330,6 +350,15 @@ document.addEventListener("keypress", function onEvent(event) {
     if (event.key.toLowerCase() === 'd') {
         getDeck(1);
     }
+});
+
+/**
+ * Event trigger to abort http request during a card pulling
+ */
+cancelPull.addEventListener("click", function() {
+    pullProcessing.classList.add("d-none");
+    cancelPullProcess = true;
+    controller.abort();
 });
 
 /*** Others ***/

@@ -40,9 +40,15 @@
                         <img src="./images/card-background.png" width="70" alt="Verso carte du deck"/>
                     </button>
                 </div>
-                <div id="buttons" class="d-flex justify-center text-center">
-                    <button id="retry" class="d-none">Recommencer</button>
-                    <button id="finish" class="d-none">Terminer</button>
+                <div id="buttons" class="d-flex justify-center flex-column text-center">
+                    <div id="pullProcess" class="d-flex d-none justify-center mb-4">
+                        <span class="bold">Tirage en cours ...</span>
+                        <button id="cancelPull">Annuler tirage</button>
+                    </div>
+                    <div>
+                        <button id="retry" class="d-none">Recommencer</button>
+                        <button id="finish" class="d-none">Terminer</button>
+                    </div>
                 </div>
                 <div id="card-informations" class="text-center">
                     <div>
