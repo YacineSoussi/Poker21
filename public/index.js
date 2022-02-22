@@ -16,9 +16,11 @@ const deckID = document.getElementById("deck");
 const missingCardsID = document.getElementById("missing-cards");
 const pullsID = document.getElementById("pulls");
 const pullCardID = document.getElementById("pullCard");
-const pullCount = document.getElementById("pullCount");
-const pullProcessing = document.getElementById("pullProcess");
-const cancelPull = document.getElementById("pullProcess");
+const pullCountID = document.getElementById("pullCount");
+const pullProcessingID = document.getElementById("pullProcess");
+const cancelPullID = document.getElementById("pullProcess");
+const detailsID = document.getElementById("details");
+const gameInformationID = document.getElementById("gameInformation");
 
 /*** Variables ***/
 
@@ -69,7 +71,7 @@ function finish(finish = false) {
     if (!gameIsFinish) {
         if (finish) {
             finishGame();
-            alert(`Tu as gagné, tu as 21 points.`);
+            openModal("Tu as gagné, tu as 21 points !");
         } else {
             getDeck(1, true);
         }
@@ -103,13 +105,13 @@ function retry() {
  */
 function getDeck(count, finish = false) {
     if (gameStarting && Object.entries(cardsConfig).length > 0 && !gameIsFinish) {
-        pullProcessing.classList.remove("d-none");
+        pullProcessingID.classList.remove("d-none");
         initializeAbortController();
 
         deck.getDeck(cardsConfig.deck_id, count, signal)
             .then(data => {
                 if (data.cards?.length) {
-                    pullProcessing.classList.add("d-none");
+                    pullProcessingID.classList.add("d-none");
                     this.updateRemainingCards(data.remaining);
                     addCard(data.cards, count);
 
@@ -117,7 +119,7 @@ function getDeck(count, finish = false) {
                         const currentCard = {...data.cards[0]};
                         const nextCardPoints = (currentCard) ? card.getCardPoints(currentCard) : 0;
                         finishGame();
-                        user.verifyUserWinning(currentCardPoints + nextCardPoints);
+                        openModal(user.verifyUserWinning(currentCardPoints + nextCardPoints));
                     }
                 }
             })
@@ -136,7 +138,7 @@ function getDeck(count, finish = false) {
  */
 function updateRemainingCards(remaining) {
     cardsConfig.remaining = remaining;
-    pullCount.setAttribute("max", remaining);
+    pullCountID.setAttribute("max", remaining);
 }
 
 /**
@@ -179,7 +181,7 @@ function addCardOperations(cards) {
                                     card.getCardPoints((cards.length > 0) ? cards[index] : cards);
 
         if (currentCardPoints > 21) {
-            alert("Tu as perdu, réessaie !");
+            openModal("Tu as perdu, réessaie !");
             finishGame();
         }
 
@@ -290,7 +292,7 @@ function getNetworkStatus() {
     const statusDisplay = document.getElementById("status");
 
     statusDisplay.innerHTML = (`
-        <p class="${(getNavigatorStatus()) ? "green" : "red"} mr-2"</p>
+        <p class="${(getNavigatorStatus()) ? "success" : "fail"} mr-2"</p>
         <p> ${statusDisplay.textContent = (getNavigatorStatus()) ? "Online" : "Offline"}</p>
     `);
 }
@@ -301,6 +303,15 @@ function getNetworkStatus() {
 function initializeAbortController() {
     controller = new AbortController();
     signal = controller.signal;
+}
+
+/**
+ * Open modal and display content inside
+ * @param {string} content Content to display in modal
+ */
+function openModal(content) {
+    detailsID.open = true;
+    gameInformationID.innerHTML = content;
 }
 
 /*** Events ***/
@@ -329,8 +340,8 @@ pullID.addEventListener("click", () => getDeck(1));
  * Event trigger to pull multiple cards
  */
 pullsID.addEventListener("click", function() {
-    const value = Number(document.getElementById("pullCount").value);
-    const maxAttributeValue = Number(pullCount.getAttribute("max"));
+    const value = Number(pullCountID.value);
+    const maxAttributeValue = Number(pullCountID.getAttribute("max"));
 
     if (value) {
         if (value < maxAttributeValue) {
@@ -339,7 +350,7 @@ pullsID.addEventListener("click", function() {
             alert(`Tu ne peux pas tirer plus de ${maxAttributeValue} cartes !`);
         }
 
-        pullCount.value = 0;
+        pullCountID.value = 0;
     }
 });
 
@@ -355,8 +366,8 @@ document.addEventListener("keypress", function onEvent(event) {
 /**
  * Event trigger to abort http request during a card pulling
  */
-cancelPull.addEventListener("click", function() {
-    pullProcessing.classList.add("d-none");
+cancelPullID.addEventListener("click", function() {
+    pullProcessingID.classList.add("d-none");
     cancelPullProcess = true;
     controller.abort();
 });

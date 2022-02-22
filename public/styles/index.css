@@ -95,16 +95,16 @@ div#deck {
   top: 0;
 }
 
-.red, .green {
+.fail, .success {
   height: 10px;
   width: 10px;
   border-radius: 18px;
 }
 
-.red {
+.fail {
   background-color: rgb(168, 2, 2);
 }
 
-.green {
+.success {
   background-color: rgb(0, 248, 33);
 }
