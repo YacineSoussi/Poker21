@@ -36,6 +36,7 @@ let cardsConfig,
     gameStarting,
     gameIsFinish,
     cancelPullProcess,
+    pullInProcess,
     controller,
     signal;
 
@@ -104,9 +105,10 @@ function retry() {
  * @param {boolean} finish Force finish of the game
  */
 function getDeck(count, finish = false) {
-    if (gameStarting && Object.entries(cardsConfig).length > 0 && !gameIsFinish) {
+    if (gameStarting && Object.entries(cardsConfig).length > 0 && !gameIsFinish && !pullInProcess) {
         pullProcessingID.classList.remove("d-none");
         initializeAbortController();
+        pullInProcess = true;
 
         deck.getDeck(cardsConfig.deck_id, count, signal)
             .then(data => {
@@ -192,6 +194,8 @@ function addCardOperations(cards) {
         card.setCardPoints(currentCardPoints, cardPointsID);
         card.updateMissingCards(cardsConfig.remaining, missingCardsID);
         createCardImage((cards.length > 0) ? cards[index] : cards, deckID);
+
+        pullInProcess = false;
     }
 }
 
@@ -227,6 +231,7 @@ function initVariables() {
     gameStarting = false;
     gameIsFinish = false;
     cancelPullProcess = false;
+    pullInProcess = false;
 }
 
 /**
@@ -370,6 +375,7 @@ cancelPullID.addEventListener("click", function() {
     pullProcessingID.classList.add("d-none");
     cancelPullProcess = true;
     controller.abort();
+    pullInProcess = false;
 });
 
 /*** Others ***/
