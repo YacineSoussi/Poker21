@@ -27,7 +27,9 @@ div#deck {
 }
 
 .defaultCardStyle {
-  animation: rotate 500ms ease-out;
+  height: calc(100% / 1.4);
+  animation: rotate 1000ms ease-out;
+  -webkit-animation: rotate 1000ms ease-out;
 }
 
 @keyframes rotate {
