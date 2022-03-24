@@ -4,13 +4,13 @@ class User {
     /**
      * Verify if user winning the game
      * @param {number} points Total points of user
-     * @returns Content according to if user winning or not
+     * @returns User winning or not
      */
     verifyUserWinning(points) {
         if (points > 21) {
-            return "Tu as gagné, bravo !";
+            return true;
         } else {
-            return "Tu as perdu, réessaie !";
+            return false;
         }
     }
 }

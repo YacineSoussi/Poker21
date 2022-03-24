@@ -39,6 +39,7 @@ let cardsConfig,
     pullInProcess,
     controller,
     signal,
+    userWin,
     count;
 
 /*** Functions ***/
@@ -122,8 +123,15 @@ function getDeck(count, finish = false) {
                     if (finish) {
                         const currentCard = {...data.cards[0]};
                         const nextCardPoints = (currentCard) ? card.getCardPoints(currentCard) : 0;
+                        userWin = user.verifyUserWinning(currentCardPoints + nextCardPoints);
+
+                        if (userWin) {
+                            openModal("Tu as gagné, bravo !");
+                        } else {
+                            openModal("Tu as perdu, réessaie !");
+                        }
+
                         finishGame();
-                        openModal(user.verifyUserWinning(currentCardPoints + nextCardPoints));
                     }
                 }
             })
@@ -212,6 +220,22 @@ function finishGame() {
 }
 
 /**
+ * Make animation on cards after winning
+ */
+function makeAnimationAfterWinning() {
+    document.querySelectorAll('.defaultCardStyle').forEach(node => node.classList.remove('lost'));
+    document.querySelectorAll('.defaultCardStyle').forEach(node => node.classList.add('winning'));
+}
+
+/**
+ * Make animation on cards after lost
+ */
+function makeAnimationAfterLost() {
+    document.querySelectorAll('.defaultCardStyle').forEach(node => node.classList.remove('winning'));
+    document.querySelectorAll('.defaultCardStyle').forEach(node => node.classList.add('lost'));
+}
+
+/**
  * Set card config
  * @param {object} data Card config properties
  */
@@ -235,6 +259,7 @@ function initVariables() {
     cancelPullProcess = false;
     pullInProcess = false;
     count = 0;
+    userWin = false;
 }
 
 /**
@@ -337,6 +362,16 @@ function initializeAbortController() {
 function openModal(content) {
     detailsID.open = true;
     gameInformationID.innerHTML = content;
+
+    setTimeout(() => {
+        detailsID.open = false;
+
+        if (userWin) {
+            makeAnimationAfterWinning();
+        } else {
+            makeAnimationAfterLost();
+        }
+    }, 5000);
 }
 
 /**

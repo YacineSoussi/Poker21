@@ -39,7 +39,8 @@ div#deck {
     -moz-transform: scale(1.5) translateY(50px) translateX(300px) rotate(-180deg);
     -ms-transform: scale(1.5) translateY(50px) translateX(300px) rotate(-180deg);
     -o-transform: scale(1.5) translateY(50px) translateX(300px) rotate(-180deg);
-}
+  }
+
   100% {
     transform: scale(1) translateY(-50px) translateX(0) rotate(0deg);
     -webkit-transform: scale(1) translateY(-50px) translateX(0) rotate(0deg);
@@ -47,6 +48,52 @@ div#deck {
     -ms-transform: scale(1) translateY(-50px) translateX(0) rotate(0deg);
     -o-transform: scale(1) translateY(-50px) translateX(0) rotate(0deg);
   }
+}
+
+@keyframes winning {
+  from {
+    transform: rotate(20deg);
+    -webkit-transform: rotate(20deg);
+    -moz-transform: rotate(20deg);
+    -ms-transform: rotate(20deg);
+    -o-transform: rotate(20deg);
+  }
+
+  to {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+  }
+}
+
+.winning {
+  animation: winning 0.5s 1s linear;
+  -webkit-animation: winning 0.5s 1s linear;
+}
+
+@keyframes lost {
+  from {
+    transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+  }
+
+  to {
+    transform: rotate(120deg);
+    -webkit-transform: rotate(120deg);
+    -moz-transform: rotate(120deg);
+    -ms-transform: rotate(120deg);
+    -o-transform: rotate(120deg);
+  }
+}
+
+.lost {
+  animation: lost 0.5s 1s linear;
+  -webkit-animation: lost 0.5s 1s linear;
 }
 
 /*** Buttons ***/
