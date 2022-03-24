@@ -38,7 +38,8 @@ let cardsConfig,
     cancelPullProcess,
     pullInProcess,
     controller,
-    signal;
+    signal,
+    count;
 
 /*** Functions ***/
 
@@ -85,6 +86,7 @@ function finish(finish = false) {
  * - Shuffle deck
  */
 function retry() {
+    gameIsFinish = true;
     resetElements();
     deck.shuffleDeck(cardsConfig.deck_id)
         .then(data => {
@@ -188,7 +190,7 @@ function addCardOperations(cards) {
         }
 
         if (currentCardPoints === 21) {
-            finish(true)
+            finish(true);
         }
 
         card.setCardPoints(currentCardPoints, cardPointsID);
@@ -232,6 +234,7 @@ function initVariables() {
     gameIsFinish = false;
     cancelPullProcess = false;
     pullInProcess = false;
+    count = 0;
 }
 
 /**
@@ -266,13 +269,30 @@ function createCardImage(card, deck) {
     let cardImage = document.createElement("img");
     cardImage.src = card.images.svg;
     cardImage.classList.add("defaultCardStyle");
+    cardImage.style.left = "50%";
 
     // increase pulled card count
     pulledCardCount ++;
 
-    // increase margin between each cards in each pull
+    const negativeOrPositive = Math.ceil((Math.random() - 0.5) * 2) < 1 ? -1 : 1;
+
+    // cards position
     if (pulledCardCount > 0) {
-        cardImage.style.left = JSON.stringify(pulledCardCount * 15) + "px";
+        let leftPosition = -50 + (count * negativeOrPositive);
+
+        if (leftPosition < -130) { leftPosition = -130; }
+        if (leftPosition > 0) { leftPosition = 0; }
+        cardImage.style.transform = `translateX(${leftPosition}%) rotate(${getRandomRotatePosition()}deg)`;
+
+        let topPosition = (pulledCardCount * 10) * negativeOrPositive;
+        if (topPosition < -75) { topPosition = -75; }
+        if (topPosition > 200) { topPosition = 200; }
+        cardImage.style.top = `${topPosition}px`;
+
+        (negativeOrPositive === 1) ? count += 10 : count -= 10;
+    } else {
+        cardImage.style.transform = `translateX(-50%) rotate(${getRandomRotatePosition()}deg)`;
+        (negativeOrPositive === 1) ? count += 10 : count -= 10;
     }
 
     // append card element to DOM
@@ -327,6 +347,14 @@ function abortCardPulling() {
     cancelPullProcess = true;
     controller.abort();
     pullInProcess = false;
+}
+
+/**
+ * Get random rotate position
+ * @returns Rotate position
+ */
+function getRandomRotatePosition() {
+    return Math.random() * (360 - 0);
 }
 
 /*** Events ***/

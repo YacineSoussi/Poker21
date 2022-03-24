@@ -35,7 +35,11 @@ div#deck {
 @keyframes rotate {
   0% {
     transform: scale(1.5) translateY(50px) translateX(300px) rotate(-180deg);
-  }
+    -webkit-transform: scale(1.5) translateY(50px) translateX(300px) rotate(-180deg);
+    -moz-transform: scale(1.5) translateY(50px) translateX(300px) rotate(-180deg);
+    -ms-transform: scale(1.5) translateY(50px) translateX(300px) rotate(-180deg);
+    -o-transform: scale(1.5) translateY(50px) translateX(300px) rotate(-180deg);
+}
   100% {
     transform: scale(1) translateY(-50px) translateX(0) rotate(0deg);
     -webkit-transform: scale(1) translateY(-50px) translateX(0) rotate(0deg);
