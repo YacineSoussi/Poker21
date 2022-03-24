@@ -384,6 +384,16 @@ function vibrateDevice() {
 }
 
 /**
+ * Detect proximity in device
+ */
+function detectDeviceProximity() {
+    window.addEventListener('deviceproximity', function(event) {
+        alert('PROXIMITY');
+        // console.log("value: " + event.value, "max: " + event.max, "min: " + event.min);
+    });
+}
+
+/**
  * Abort pulling of a card in process
  */
 function abortCardPulling() {
