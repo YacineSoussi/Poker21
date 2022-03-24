@@ -109,6 +109,7 @@ function retry() {
  */
 function getDeck(count, finish = false) {
     if (gameStarting && Object.entries(cardsConfig).length > 0 && !gameIsFinish && !pullInProcess) {
+        vibrateDevice();
         pullProcessingID.classList.remove("d-none");
         initializeAbortController();
         pullInProcess = true;
@@ -360,18 +361,26 @@ function initializeAbortController() {
  * @param {string} content Content to display in modal
  */
 function openModal(content) {
+    vibrateDevice();
     detailsID.open = true;
     gameInformationID.innerHTML = content;
 
-    setTimeout(() => {
-        detailsID.open = false;
+    if (userWin) {
+        makeAnimationAfterWinning();
+    } else {
+        makeAnimationAfterLost();
+    }
+}
 
-        if (userWin) {
-            makeAnimationAfterWinning();
-        } else {
-            makeAnimationAfterLost();
-        }
-    }, 5000);
+/**
+ * Vibrate device
+ */
+function vibrateDevice() {
+    const canVibrate = window.navigator.vibrate;
+
+    if (canVibrate) {
+        window.navigator.vibrate(1000);
+    }
 }
 
 /**
