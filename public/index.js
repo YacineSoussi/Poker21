@@ -186,12 +186,12 @@ function addCard(cards, count) {
 function addCardOperations(cards) {
     if (!gameIsFinish) {
         // display card pulled in DOM (symbol + value)
-        currentCardID.innerHTML = card.getCardSymbol((cards.length > 0) ? cards[index] : cards);
+        currentCardID.innerHTML = card.getCardSymbol(cards);
 
         // update card points
         currentCardPoints = (currentCardPoints) ?
-                                currentCardPoints + card.getCardPoints((cards.length > 0) ? cards[index] : cards) :
-                                    card.getCardPoints((cards.length > 0) ? cards[index] : cards);
+                                currentCardPoints + card.getCardPoints(cards) :
+                                    card.getCardPoints(cards);
 
         if (currentCardPoints > 21) {
             openModal("Tu as perdu, réessaie !");
@@ -204,7 +204,7 @@ function addCardOperations(cards) {
 
         card.setCardPoints(currentCardPoints, cardPointsID);
         card.updateMissingCards(cardsConfig.remaining, missingCardsID);
-        createCardImage((cards.length > 0) ? cards[index] : cards, deckID);
+        createCardImage(cards, deckID);
 
         pullInProcess = false;
     }
