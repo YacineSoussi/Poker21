@@ -1,0 +1,188 @@
+/*** Toaster ***/
+
+#toasterContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  position: fixed;
+  margin: 0 auto;
+  padding: 0;
+  z-index: 999;
+  max-width: 320px;
+}
+
+/*** Alerts ***/
+
+.alerts {
+  display: flex;
+  align-items: flex-start;
+  margin: 10px 0 0 0;
+  padding: 0 10px;
+  box-sizing: border-box;
+  flex-direction: column;
+  font-family: sans-serif;
+  width: 100%;
+  border-radius: 4px;
+  font-size: 12.5px;
+  transition: all 0.3 ease-out;
+}
+
+.alerts {
+  animation: fadeIn .3s ease-in 0s 1 forwards;
+}
+
+.alerts-success {
+  background-color: rgba(209, 231, 221, 0.96);
+  color: #0f5132;
+}
+
+.alerts-danger {
+  background-color: rgba(248, 215, 218, 0.96);
+  color: #842029;
+}
+
+.alerts-warning {
+  background-color: rgba(255, 243, 205, 0.96);
+  color: #664d03;
+}
+
+.alerts-info {
+  background-color: rgba(207, 244, 252, 0.96);
+  color: #055160;
+}
+
+.alerts > h3 {
+  width: 100%;
+  display: inline-block;
+  font-size: 12.5px;
+  margin: 0;
+  padding: 10px 0;
+  line-height: 1.5;
+}
+
+.alerts > p {
+  width: 100%;
+  min-height: 0px;
+  display: inline-block;
+  font-size: 12.5px;
+  padding: 0 0 10px;
+  margin: 0;
+}
+
+/*** Buttons ***/
+
+.btnLaunch1, .btnLaunch2, .btnLaunch3, .btnLaunch4 {
+  padding: 10px;
+  margin: 10px;
+  background-color: #fff;
+  border: 2px solid #0057fa;
+  border-radius: 100px;
+}
+
+.btnLaunch1:hover, .btnLaunch2:hover, .btnLaunch3:hover, .btnLaunch4:hover {
+  border: 2px solid #002261;
+}
+
+button:active, button:focus {
+  outline: none;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+/*** Positions ***/
+
+.top_right {
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  flex-direction: column-reverse;
+}
+
+.top_left {
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  flex-direction: column-reverse;
+}
+
+.bottom_right {
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  flex-direction: column-reverse;
+}
+
+.bottom_left {
+  top: 0;
+  left: 50%;
+  flex-direction: column-reverse;
+}
+
+/*** Responsive design ***/
+
+@media (min-width: 769px) {
+  .top_right {
+    top: 0;
+    bottom: auto;
+    right: 10px;
+    left: auto;
+    transform: none;
+    flex-direction: column-reverse;
+  }
+
+  .top_left {
+    top: 0;
+    bottom: auto;
+    right: auto;
+    left: 10px;
+    transform: none;
+    flex-direction: column-reverse;
+  }
+
+  .bottom_right {
+    top: auto;
+    bottom: 0;
+    right: 10px;
+    left: auto;
+    transform: none;
+    flex-direction: column;
+  }
+
+  .bottom_left {
+    top: auto;
+    bottom: 0;
+    right: auto;
+    left: 10px;
+    transform: none;
+    flex-direction: column;
+  }
+}
+
+/*** Animations ***/
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.fadeOut {
+  animation: fadeOut .3s ease-out 0s 1 forwards;
+}

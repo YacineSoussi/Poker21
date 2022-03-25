@@ -36,12 +36,21 @@
     margin-bottom: 16px;
 }
 
+.ml-2 {
+    margin-left: 10px;
+}
+
 .mr-2 {
     margin-right: 8px;
 }
 
+.m-0 {
+    margin: 0;
+}
+
 .bold {
     font-weight: bold;
+    color: white;
 }
 
 .text-center {

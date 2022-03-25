@@ -10,6 +10,7 @@
             <link href="./styles/global.css" rel="stylesheet"/>
             <link href="./styles/index.css" rel="stylesheet"/>
             <link href="./styles/modal.css" rel="stylesheet"/>
+            <link href="./styles/toaster.css" rel="stylesheet"/>
 
             <title>POKER21</title>
 
@@ -17,77 +18,84 @@
             <script defer src="./scripts/deck.js" type="text/javascript"></script>
             <script defer src="./scripts/card.js" type="text/javascript"></script>
             <script defer src="./scripts/user.js" type="text/javascript"></script>
+            <script defer src="./scripts/toaster.js" type="text/javascript"></script>
             <script defer src="index.js" type="text/javascript"></script>
         </head>
-        <body>
-            <h1 class="title text-center">Poker 21 !</h1>
-            <button id="start" class="d-block m-auto d-none">Commencer une partie</button>
-            <button id="previousStart" class="d-block m-auto d-none">Reprendre la partie</button>
-
-            <!-- Network status -->
-            <div id="status" class="d-flex align-center"></div>
-
-            <!-- Spinner -->
-            <div
-                id="spinner-block"
-                class="d-none d-flex justify-center flex-column align-center mt-2 mb-2">
-                <p>Chargement des cartes ...</p>
-                <div class="spinner-loading"></div>
+        <body class="m-0">
+            <div id="homePage">
+                <h1 class="m-0 text-center">POKER 21</h1>
+                <div class="background-poker">
+                    <img src="./images/background-poker.jpeg" alt="Poker image">
+                </div>
+                <button id="start" class="d-block m-auto d-none">Commencer une partie</button>
+                <button id="previousStart" class="d-block m-auto d-none">Reprendre la partie</button>
             </div>
+            <div class="d-none" id="homeGame">
+                <!-- Network status -->
+                <div id="status" class="ml-2 d-flex align-center"></div>
 
-            <!-- Main -->
-            <div id="main" class="hidden">
-                <div id="deck" class="m-auto relative">
-                    <button class="card-deck" id="pull">
-                        <img src="./images/card-background.png" width="70" alt="Verso carte du deck"/>
-                    </button>
+                <!-- Spinner -->
+                <div
+                    id="spinner-block"
+                    class="hidden d-flex justify-center flex-column align-center mt-2 mb-2">
+                    <p>Chargement des cartes ...</p>
+                    <div class="spinner-loading"></div>
                 </div>
-                <div id="buttons" class="d-flex justify-center flex-column text-center">
-                    <div id="pullProcess" class="d-flex d-none justify-center mb-4">
-                        <span class="bold">Tirage en cours ...</span>
-                        <button id="cancelPull">Annuler tirage</button>
-                    </div>
-                    <div>
-                        <button id="retry" class="d-none">Recommencer</button>
-                        <button id="finish" class="d-none">Terminer</button>
-                    </div>
-                </div>
-                <div id="card-informations" class="text-center">
-                    <div>
-                        <span>Carte tirée : </span>
-                        <span id="card-pulled">Aucune carte tirée ...</span>
-                    </div>
-                    <div>
-                        <span>Nombre de points : </span>
-                        <span id="card-points" value="0">0</span>
-                    </div>
-                    <div>
-                        <span>Nombre de cartes manquantes : </span>
-                        <span id="missing-cards"></span>
-                    </div>
-                    <div id="pullCard">
-                        <label for="pullCount">Tirer plusieurs cartes</label>
-                        <input type="number" min="0" max="52" value="0" id="pullCount">
-                        <input type="button" value="Tirer" id="pulls">
-                    </div>
-                </div>
-            </div>
 
-            <!-- Modal -->
-            <div class="container">
-                <details id="details">
-                    <summary>
-                        <div class="details-modal-overlay"></div>
-                    </summary>
-                    <div class="details-modal">
-                        <div class="details-modal-title">
-                            <h1>Détail de la partie</h1>
+                <!-- Main -->
+                <div id="main" class="hidden">
+                    <div id="deck" class="m-auto relative">
+                        <button class="card-deck" id="pull">
+                            <img src="./images/card-background.png" width="70" alt="Verso carte du deck"/>
+                        </button>
+                    </div>
+                    <div id="buttons" class="d-flex justify-center flex-column text-center">
+                        <div id="pullProcess" class="d-flex d-none justify-center mb-4">
+                            <span class="bold">Tirage en cours ...</span>
+                            <button id="cancelPull">Annuler tirage</button>
                         </div>
-                        <div class="details-modal-content">
-                            <p id="gameInformation"></p>
+                        <div>
+                            <button id="retry" class="d-none">Recommencer</button>
+                            <button id="finish" class="d-none">Terminer</button>
                         </div>
                     </div>
-                </details>
+                    <div id="card-informations" class="text-center">
+                        <div>
+                            <span>Carte tirée : </span>
+                            <span id="card-pulled">Aucune carte tirée ...</span>
+                        </div>
+                        <div>
+                            <span>Nombre de points : </span>
+                            <span id="card-points" value="0">0</span>
+                        </div>
+                        <div>
+                            <span>Nombre de cartes manquantes : </span>
+                            <span id="missing-cards"></span>
+                        </div>
+                        <div id="pullCard">
+                            <label for="pullCount">Tirer plusieurs cartes</label>
+                            <input type="number" min="0" max="52" value="0" id="pullCount">
+                            <input type="button" value="Tirer" id="pulls">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="container">
+                    <details id="details">
+                        <summary>
+                            <div class="details-modal-overlay"></div>
+                        </summary>
+                        <div class="details-modal">
+                            <div class="details-modal-title">
+                                <h1 id="detailInformation"></h1>
+                            </div>
+                            <div class="details-modal-content">
+                                <p id="gameInformation"></p>
+                            </div>
+                        </div>
+                    </details>
+                </div>
             </div>
         </body>
     </html>

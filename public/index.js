@@ -1,32 +1,34 @@
 /*** DOM elements ***/
 
-const previousStartID = document.getElementById("previousStart");
-const startID = document.getElementById("start");
-const retryID = document.getElementById("retry");
-const pullID = document.getElementById("pull");
-const finishID = document.getElementById("finish");
-const mainID = document.getElementById("main");
-const currentCardID = document.getElementById("card-pulled");
+const cancelPullID = document.getElementById("pullProcess");
 const cardPointsID = document.getElementById("card-points");
-const spinnerLoadingID = document.getElementById("spinner-block");
+const currentCardID = document.getElementById("card-pulled");
 const deckID = document.getElementById("deck");
+const detailInformationID = document.getElementById("detailInformation");
+const detailsID = document.getElementById("details");
+const finishID = document.getElementById("finish");
+const gameInformationID = document.getElementById("gameInformation");
+const homeGameID = document.getElementById("homeGame");
+const homePageID = document.getElementById("homePage");
+const mainID = document.getElementById("main");
 const missingCardsID = document.getElementById("missing-cards");
-const pullsID = document.getElementById("pulls");
+const previousStartID = document.getElementById("previousStart");
 const pullCardID = document.getElementById("pullCard");
 const pullCountID = document.getElementById("pullCount");
+const pullID = document.getElementById("pull");
 const pullProcessingID = document.getElementById("pullProcess");
-const cancelPullID = document.getElementById("pullProcess");
-const detailsID = document.getElementById("details");
-const gameInformationID = document.getElementById("gameInformation");
+const pullsID = document.getElementById("pulls");
+const retryID = document.getElementById("retry");
+const spinnerLoadingID = document.getElementById("spinner-block");
+const startID = document.getElementById("start");
 
 /*** Variables ***/
 
-// instances
 const deck = new Deck();
 const card = new Card();
 const user = new User();
+const toaster = new Toaster();
 
-// properties
 let cardsConfig,
     currentCardPoints,
     pulledCardCount,
@@ -42,23 +44,58 @@ let cardsConfig,
 /*** Functions ***/
 
 /**
+ * Init variables
+ */
+function initVariables() {
+    cardsConfig = {};
+    currentCardPoints = 0;
+    pulledCardCount = -1;
+    gameStarting = false;
+    gameIsFinish = false;
+    cancelPullProcess = false;
+    pullInProcess = false;
+    count = 0;
+    userWin = false;
+}
+
+/**
+ * Reset elements
+ * - Reset class of DOM elements
+ * - Reset content of DOM elements
+ * - Reset attributes of DOM elements
+ */
+function resetElements() {
+    retryID.classList.add("d-none");
+    finishID.classList.add("d-none");
+    mainID.classList.add("hidden");
+    pullCardID.classList.remove("d-none");
+    document.querySelectorAll('.defaultCardStyle').forEach(node => node.remove());
+    currentCardID.innerHTML = 'Aucune carte tirée ...';
+    cardPointsID.innerHTML = '0';
+    cardPointsID.setAttribute("value", '0');
+    missingCardsID.innerHTML = '';
+}
+
+/**
  * Start the game
  * - Loading cards
  * - Enable or disable DOM elements
  */
 function start() {
     initVariables();
-
-    if (localStorage.getItem('cardsConfig')) {
+    if (localStorage.getItem('cardsConfig')) { // game already exist
         previousStartID.classList.add("d-none");
+        spinnerLoadingID.classList.remove("hidden");
+        mainID.classList.remove("hidden");
         setCardConfig(JSON.parse(localStorage.getItem('cardsConfig')));
         gameStarting = true;
-    } else {
+    } else { // new game
         startID.classList.add("d-none");
-        spinnerLoadingID.classList.remove("d-none");
+        spinnerLoadingID.classList.remove("hidden");
         deck.getNewDeck()
-            .then(data => {
-                if (data) {
+        .then(data => {
+            if (data) {
+                    mainID.classList.remove("hidden");
                     setCardConfig(data);
                     gameStarting = true;
                 }
@@ -67,18 +104,35 @@ function start() {
                 throw new Error(error);
             });
     }
+
+    homePageID.classList.add('d-none');
+    homeGameID.classList.remove('d-none');
+}
+
+/**
+ * Display toaster
+ * @param {string} style Toaster style
+ * @param {string} title Toaster title
+ * @param {string} content Toaster content
+ */
+function displayToaster(style, title, content) {
+    toaster.render({
+        style,
+        title,
+        content
+    });
 }
 
 /**
  * Finish the game
  * @param {boolean} finish Force finish of the game
- * - Force here is useful for main case like when card points of user is equal to 21
+ * - PS: force here is useful for main case like when card points of user is equal to 21
  */
 function finish(finish = false) {
     if (!gameIsFinish) {
         if (finish) {
             finishGame();
-            openModal("Tu as gagné, tu as 21 points !");
+            openModal("Détails de la partie" , "Tu as gagné, tu as 21 points !");
         } else {
             getDeck(1, true);
         }
@@ -91,7 +145,6 @@ function finish(finish = false) {
  * - Shuffle deck
  */
 function retry() {
-    gameIsFinish = true;
     resetElements();
     deck.shuffleDeck(cardsConfig.deck_id)
         .then(data => {
@@ -107,6 +160,58 @@ function retry() {
 }
 
 /**
+ * Start process
+ */
+function startProcess() {
+    pullProcessingID.classList.remove("d-none");
+    initializeAbortController();
+    pullInProcess = true;
+}
+
+/**
+ * Get deck data
+ * @param {number} count Cards count
+ * @param {boolean} finish Force finish of the game
+ */
+function getDeckData(count, finish) {
+    deck.getDeck(cardsConfig.deck_id, count, signal)
+        .then(data => {
+            if (data.cards?.length) {
+                pullProcessingID.classList.add("d-none");
+                this.updateRemainingCards(data.remaining);
+                addCard(data.cards, count);
+
+                // update local storage in each pull
+                localStorage.setItem('cardsConfig', JSON.stringify({
+                    success: data.success,
+                    deck_id: data.deck_id,
+                    remaining: data.remaining
+                }));
+
+                if (finish) {
+                    const currentCard = {...data.cards[0]};
+                    const nextCardPoints = (currentCard) ? card.getCardPoints(currentCard) : 0;
+                    userWin = user.verifyUserWinning(currentCardPoints + nextCardPoints);
+
+                    if (userWin) {
+                        openModal("Détails de la partie" , "Tu as gagné, bravo !");
+                    } else {
+                        openModal("Détails de la partie", "Tu as perdu, réessaie !");
+                    }
+
+                    finishGame();
+                }
+            }
+        })
+        .catch(() => {
+            if (!cancelPullProcess) {
+                displayToaster('danger', 'Erreur', 'Une erreur est survenu lors du tirage des cartes.');
+                return;
+            }
+        });
+}
+
+/**
  * Get deck
  * @param {number} count Cards count
  * @param {boolean} finish Force finish of the game
@@ -114,50 +219,21 @@ function retry() {
 function getDeck(count, finish = false) {
     if (gameStarting && Object.entries(cardsConfig).length > 0 && !gameIsFinish && !pullInProcess) {
         vibrateDevice();
-        pullProcessingID.classList.remove("d-none");
-        initializeAbortController();
-        pullInProcess = true;
-
-        deck.getDeck(cardsConfig.deck_id, count, signal)
-            .then(data => {
-                if (data.cards?.length) {
-                    pullProcessingID.classList.add("d-none");
-                    this.updateRemainingCards(data.remaining);
-                    addCard(data.cards, count);
-
-                    // update local storage in each pull
-                    localStorage.setItem('cardsConfig', JSON.stringify({
-                        success: data.success,
-                        deck_id: data.deck_id,
-                        remaining: data.remaining
-                    }));
-
-                    if (finish) {
-                        const currentCard = {...data.cards[0]};
-                        const nextCardPoints = (currentCard) ? card.getCardPoints(currentCard) : 0;
-                        userWin = user.verifyUserWinning(currentCardPoints + nextCardPoints);
-
-                        if (userWin) {
-                            openModal("Tu as gagné, bravo !");
-                        } else {
-                            openModal("Tu as perdu, réessaie !");
-                        }
-
-                        finishGame();
-                    }
-                }
-            })
-            .catch(err => {
-                if (!cancelPullProcess) {
-                    alert("Une erreur est survenu lors du tirage des cartes !");
-                    throw new Error(err);
-                }
-            });
+        startProcess();
+        getDeckData(count, finish);
     }
 }
 
 /**
- * Update remaining of cards
+ * Initialize AbortController interface and signal object
+ */
+function initializeAbortController() {
+    controller = new AbortController();
+    signal = controller.signal;
+}
+
+/**
+ * Update cards remaining
  * @param {number} remaining Cards remaining
  */
 function updateRemainingCards(remaining) {
@@ -182,9 +258,7 @@ function addCard(cards, count) {
             addCardOperations(cards[0]);
         } else if (count > 1) {
             for (let index = 0; index < count; index++) {
-                setTimeout(() => {
-                    addCardOperations(cards[index]);
-                }, 1000 + (1500 * index));
+                setTimeout(() => addCardOperations(cards[index]), 1000 + (1500 * index));
             }
         }
     }
@@ -205,8 +279,8 @@ function addCardOperations(cards) {
                                     card.getCardPoints(cards);
 
         if (currentCardPoints > 21) {
-            openModal("Tu as perdu, réessaie !");
             finishGame();
+            openModal("Détails de la partie", "Tu as perdu, réessaie !");
         }
 
         if (currentCardPoints === 21) {
@@ -216,7 +290,6 @@ function addCardOperations(cards) {
         card.setCardPoints(currentCardPoints, cardPointsID);
         card.updateMissingCards(cardsConfig.remaining, missingCardsID);
         createCardImage(cards, deckID);
-
         pullInProcess = false;
     }
 }
@@ -255,42 +328,9 @@ function setCardConfig(data) {
     cardsConfig = {...data};
     localStorage.setItem("cardsConfig", JSON.stringify(cardsConfig));
     mainID.classList.remove("hidden");
-    spinnerLoadingID.classList.add("d-none");
+    spinnerLoadingID.classList.add("hidden");
     card.updateMissingCards(cardsConfig.remaining, missingCardsID);
-}
-
-/**
- * Init variables
- */
-function initVariables() {
-    cardsConfig = {};
-    currentCardPoints = 0;
-    pulledCardCount = -1;
-    gameStarting = false;
-    gameIsFinish = false;
-    cancelPullProcess = false;
-    pullInProcess = false;
-    count = 0;
-    userWin = false;
-}
-
-/**
- * Reset elements
- * - Reset class of DOM elements
- * - Reset content of DOM elements
- * - Reset attributes of DOM elements
- */
-function resetElements() {
-    retryID.classList.add("d-none");
-    finishID.classList.add("d-none");
-    spinnerLoadingID.classList.remove("d-none");
-    mainID.classList.add("hidden");
-    pullCardID.classList.remove("d-none");
-    document.querySelectorAll('.defaultCardStyle').forEach(node => node.remove());
-    currentCardID.innerHTML = 'Aucune carte tirée ...';
-    cardPointsID.innerHTML = '0';
-    cardPointsID.setAttribute("value", '0');
-    missingCardsID.innerHTML = '';
+    updateRemainingCards(cardsConfig.remaining);
 }
 
 /**
@@ -359,21 +399,16 @@ function getNetworkStatus() {
     `);
 }
 
-/**
- * Initialize AbortController interface and signal object
- */
-function initializeAbortController() {
-    controller = new AbortController();
-    signal = controller.signal;
-}
 
 /**
  * Open modal and display content inside
+ * @param {string} description Title of description
  * @param {string} content Content to display in modal
  */
-function openModal(content) {
+function openModal(description, content) {
     vibrateDevice();
     detailsID.open = true;
+    detailInformationID.innerHTML = description;
     gameInformationID.innerHTML = content;
 
     if (userWin) {
@@ -460,7 +495,7 @@ pullsID.addEventListener("click", function() {
         if (value < maxAttributeValue) {
             getDeck(value);
         } else {
-            alert(`Tu ne peux pas tirer plus de ${maxAttributeValue} cartes !`);
+            displayToaster('info', 'Information', `Tu ne peux pas tirer plus de ${maxAttributeValue} cartes !`);
         }
 
         pullCountID.value = 0;

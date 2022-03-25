@@ -1,15 +1,5 @@
 /*** Modal ***/
 
-html {
-  box-sizing: border-box;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-}
-
 body {
   @media only screen and (min-width: 600px) {
     justify-content: center;

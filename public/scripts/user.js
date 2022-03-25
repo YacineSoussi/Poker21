@@ -1,5 +1,7 @@
 class User {
-    constructor() {}
+    User() {
+        // ...
+    }
 
     /**
      * Verify if user winning the game

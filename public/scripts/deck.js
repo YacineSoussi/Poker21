@@ -1,5 +1,7 @@
 class Deck {
-    constructor() {}
+    Deck() {
+        // ...
+    }
 
     /**
      * Get new deck data

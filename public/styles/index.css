@@ -1,19 +1,93 @@
-/*** Deck ***/
-
-div#deck {
-  height: 400px;
-  width: 600px;
-  font-size: 3rem;
-  border-radius: .5rem;
-  user-select: none;
-  background-color: #2a8f1e;
-  -webkit-border-radius: .5rem;
-  -moz-border-radius: .5rem;
-  -ms-border-radius: .5rem;
-  -o-border-radius: .5rem;
+body {
+  background-color: #1b301b;
 }
 
-.card-deck {
+/*** Home page before starting game ***/
+
+#homePage {
+  height: 100vh;
+  background-color: #1b301b;
+}
+
+#homePage h1 {
+  padding: 40px 0 10px 0;
+  color: white;
+}
+
+#homePage .background-poker {
+  padding: 25px;
+}
+
+#homePage .background-poker img {
+  height: 100%;
+  width: 100%;
+}
+
+#homePage #start,
+#homePage #previousStart {
+  height: 30px;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  -webkit-border-radius: 18px;
+  -moz-border-radius: 18px;
+  -ms-border-radius: 18px;
+  -o-border-radius: 18px;
+}
+
+#homePage #start:hover,
+#homePage #previousStart:hover {
+  color: #2b8e2b;
+}
+
+/*** Home game after starting game ***/
+
+#homeGame {
+  height: 100vh;
+  background-color: #1b301b;
+}
+
+#homeGame #status {
+  color: white;
+}
+
+#homeGame #main {
+  height: calc(100% - 50px);
+  padding-top: 50px;
+}
+
+#homeGame div#deck {
+  height: 60%;
+  width: 85%;
+  font-size: 3rem;
+  background-color: #1b301b;
+  border: 1px dashed white;
+}
+
+#homeGame #retry,
+#homeGame #finish,
+#homeGame #cancelPull {
+  height: 30px;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  -webkit-border-radius: 18px;
+  -moz-border-radius: 18px;
+  -ms-border-radius: 18px;
+  -o-border-radius: 18px;
+}
+
+#homeGame #retry:hover,
+#homeGame #finish:hover,
+#homeGame #cancelPull:hover {
+  color: #2b8e2b;
+}
+
+#homeGame #card-informations {
+  color: white;
+}
+
+#homeGame .card-deck {
   position: absolute;
   bottom: 25px;
   right: 25px;
@@ -21,15 +95,115 @@ div#deck {
   transition: transform 200ms ease-in-out;
 }
 
-.card-deck:hover {
+#homeGame .card-deck:hover {
   cursor: pointer;
   transform: scale(1.05);
 }
 
-.defaultCardStyle {
+#homeGame .defaultCardStyle {
   height: calc(100% / 1.4);
   animation: rotate 1000ms ease-out;
   -webkit-animation: rotate 1000ms ease-out;
+}
+
+/*** Buttons ***/
+
+#homeGame #buttons {
+  margin-top: 50px;
+}
+
+#homeGame #buttons button {
+  margin: 0 5px;
+}
+
+/*** Card informations ***/
+
+#homeGame #card-informations {
+  margin-top: 20px;
+}
+
+#homeGame #card-informations div {
+  margin: 0 5px;
+}
+
+#homeGame #card-informations #pullCount {
+  width: 50px;
+}
+
+#homeGame .winning {
+  animation: winning 0.5s 1s linear;
+  -webkit-animation: winning 0.5s 1s linear;
+}
+
+#homeGame .lost {
+  animation: lost 0.5s 1s linear;
+  -webkit-animation: lost 0.5s 1s linear;
+}
+
+/*** Spinner ***/
+
+#homeGame #spinner-block {
+  position: absolute;
+  bottom: 50%;
+  right: 50%;
+  z-index: 1;
+  display: flex;
+  color: white;
+  transform: translateX(50%);
+  -webkit-transform: translateX(50%);
+  -moz-transform: translateX(50%);
+  -ms-transform: translateX(50%);
+  -o-transform: translateX(50%);
+}
+
+#homeGame #spinner-block .spinner-loading {
+  border: 8px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 8px solid grey;
+  width: 30px;
+  height: 30px;
+  animation: spinner 2s linear infinite;
+  -webkit-animation: spinner 2s linear infinite;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
+}
+
+/*** Status network ***/
+
+#homeGame #status {
+  position: absolute;
+  top: 0;
+}
+
+#homeGame .fail, .success {
+  height: 10px;
+  width: 10px;
+  border-radius: 18px;
+}
+
+#homeGame .fail {
+  background-color: rgb(168, 2, 2);
+}
+
+#homeGame .success {
+  background-color: rgb(0, 248, 33);
+}
+
+/*** Animations ***/
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes rotate {
@@ -68,11 +242,6 @@ div#deck {
   }
 }
 
-.winning {
-  animation: winning 0.5s 1s linear;
-  -webkit-animation: winning 0.5s 1s linear;
-}
-
 @keyframes lost {
   from {
     transform: rotate(-90deg);
@@ -89,75 +258,4 @@ div#deck {
     -ms-transform: rotate(120deg);
     -o-transform: rotate(120deg);
   }
-}
-
-.lost {
-  animation: lost 0.5s 1s linear;
-  -webkit-animation: lost 0.5s 1s linear;
-}
-
-/*** Buttons ***/
-
-#buttons {
-  margin-top: 50px;
-}
-
-#buttons button {
-  margin: 0 5px;
-}
-
-/*** Card informations ***/
-
-#card-informations {
-  margin-top: 20px;
-}
-
-#card-informations div {
-  margin: 0 5px;
-}
-
-#card-informations #pullCount {
-  width: 50px;
-}
-
-/*** Spinner ***/
-
-.spinner-loading {
-  border: 8px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 8px solid grey;
-  width: 30px;
-  height: 30px;
-  animation: spinner 2s linear infinite;
-  -webkit-animation: spinner 2s linear infinite;
-}
-
-@keyframes spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/*** Status network ***/
-
-#status {
-  position: absolute;
-  top: 0;
-}
-
-.fail, .success {
-  height: 10px;
-  width: 10px;
-  border-radius: 18px;
-}
-
-.fail {
-  background-color: rgb(168, 2, 2);
-}
-
-.success {
-  background-color: rgb(0, 248, 33);
 }

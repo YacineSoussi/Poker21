@@ -1,5 +1,7 @@
 class Card {
-    constructor() {}
+    Card() {
+        // ...
+    }
 
     /**
      * Get card with his symbol
