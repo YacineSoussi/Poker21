@@ -33,10 +33,10 @@ Il doit être possible de tirer une carte depuis un deck.
 - Il doit y avoir une animation des cartes lorsque le joueur perd une partie. ✅
 - Il doit y avoir un retour haptique (vibreur) lorsqu’une carte est tirée, lors d’une victoire ou d’un échec. ✅
 - Il doit être possible de jouer à la fois sur mobile, tablette ou ordinateur. ✅
-- Il doit être possible de tirer une nouvelle carte en secouant l’appareil.
-- Il doit être possible de tirer une nouvelle carte lorsque la main est proche du capteur de proximité.
-- Il doit être possible de reprendre une partie à tout moment, même après avoir fermé l’onglet.
-- Il doit y avoir une interface graphique pensée pour l’UX/UI et agréable à utiliser.
+- Il doit être possible de tirer une nouvelle carte en secouant l’appareil. ❓
+- Il doit être possible de tirer une nouvelle carte lorsque la main est proche du capteur de proximité. ❓
+- Il doit être possible de reprendre une partie à tout moment, même après avoir fermé l’onglet. ❓
+- Il doit y avoir une interface graphique pensée pour l’UX/UI et agréable à utiliser. ❓
 
 # Pré-requis
 
@@ -44,6 +44,6 @@ Il doit être possible de tirer une carte depuis un deck.
 - Le projet doit être organisé en dossiers (styles, images, scripts, ...). Le projet doit être servi sur un serveur Web. ✅
 - Le projet n’utilise aucune fonctionnalité dépréciée. ✅
 - Le projet ne doit avoir aucune dépendance autre que Docker. ✅
-- Toutes les erreurs doivent être gérées.
-- Le projet utilise des modules ECMAScript.
-- Le projet a une documentation pour les testeurs.
+- Toutes les erreurs doivent être gérées. ❓
+- Le projet utilise des modules ECMAScript. ❓
+- Le projet a une documentation pour les testeurs. ❓

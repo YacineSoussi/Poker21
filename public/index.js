@@ -1,9 +1,6 @@
-/*** DOM loaded ****/
-
-window.addEventListener("load", () => getNetworkStatus());
-
 /*** DOM elements ***/
 
+const previousStartID = document.getElementById("previousStart");
 const startID = document.getElementById("start");
 const retryID = document.getElementById("retry");
 const pullID = document.getElementById("pull");
@@ -51,18 +48,25 @@ let cardsConfig,
  */
 function start() {
     initVariables();
-    startID.classList.add("d-none");
-    spinnerLoadingID.classList.remove("d-none");
-    deck.getNewDeck()
-        .then(data => {
-            if (data) {
-                setCardConfig(data);
-                gameStarting = true;
-            }
-        })
-        .catch(error => {
-            throw new Error(error);
-        });
+
+    if (localStorage.getItem('cardsConfig')) {
+        previousStartID.classList.add("d-none");
+        setCardConfig(JSON.parse(localStorage.getItem('cardsConfig')));
+        gameStarting = true;
+    } else {
+        startID.classList.add("d-none");
+        spinnerLoadingID.classList.remove("d-none");
+        deck.getNewDeck()
+            .then(data => {
+                if (data) {
+                    setCardConfig(data);
+                    gameStarting = true;
+                }
+            })
+            .catch(error => {
+                throw new Error(error);
+            });
+    }
 }
 
 /**
@@ -120,6 +124,13 @@ function getDeck(count, finish = false) {
                     pullProcessingID.classList.add("d-none");
                     this.updateRemainingCards(data.remaining);
                     addCard(data.cards, count);
+
+                    // update local storage in each pull
+                    localStorage.setItem('cardsConfig', JSON.stringify({
+                        success: data.success,
+                        deck_id: data.deck_id,
+                        remaining: data.remaining
+                    }));
 
                     if (finish) {
                         const currentCard = {...data.cards[0]};
@@ -419,6 +430,11 @@ function getRandomRotatePosition() {
 startID.addEventListener("click", () => start());
 
 /**
+ * Event trigger to get previous game
+ */
+previousStartID.addEventListener("click", () => start());
+
+/**
  * Event trigger to retry the game
  */
 retryID.addEventListener("click", () => retry());
@@ -470,6 +486,19 @@ document.addEventListener("keypress", function onEvent(event) {
  * Event trigger to abort http request during a card pulling
  */
 cancelPullID.addEventListener("click", () => abortCardPulling());
+
+/**
+ * Event trigger when DOM loaded
+ */
+window.addEventListener("load", () => {
+    getNetworkStatus();
+
+    if (localStorage.getItem('cardsConfig')) {
+        previousStartID.classList.remove("d-none");
+    } else {
+        startID.classList.remove("d-none");
+    }
+});
 
 /*** Others ***/
 
