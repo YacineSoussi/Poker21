@@ -19,7 +19,7 @@ body {
 }
 
 #homePage .background-poker img {
-  height: 100%;
+  max-height: 600px;
   width: 100%;
 }
 
@@ -33,6 +33,12 @@ body {
   -moz-border-radius: 18px;
   -ms-border-radius: 18px;
   -o-border-radius: 18px;
+}
+
+#homePage .homePageContent {
+  height: calc(100% - 90px);
+  display: flex;
+  align-items: center;
 }
 
 #homePage #start:hover,
@@ -81,6 +87,10 @@ body {
 #homeGame #finish:hover,
 #homeGame #cancelPull:hover {
   color: #2b8e2b;
+}
+
+#homeGame details summary::-webkit-details-marker {
+  display:none;
 }
 
 #homeGame #card-informations {

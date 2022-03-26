@@ -12,6 +12,7 @@ let startID,
     pullID,
     cardPointsID,
     currentCardID,
+    containerID,
     deckID,
     detailInformationID,
     detailsID,
@@ -65,6 +66,7 @@ function initVariables() {
 function resetElements() {
     retryID.classList.add("d-none");
     finishID.classList.add("d-none");
+    containerID.classList.add('d-none');
     mainID.classList.add("hidden");
     pullCardID.classList.remove("d-none");
     document.querySelectorAll('.defaultCardStyle').forEach(node => node.remove());
@@ -421,6 +423,7 @@ function getNetworkStatus() {
  * @param {string} content Content to display in modal
  */
 function openModal(description, content) {
+    containerID.classList.remove('d-none');
     vibrateDevice();
     detailsID.open = true;
     detailInformationID.innerHTML = description;
@@ -514,6 +517,7 @@ function setAllEventsListener() {
     pullID = document.getElementById("pull");
     pullsID = document.getElementById("pulls");
     cancelPullID = document.getElementById("pullProcess");
+    containerID = document.getElementById("container");
 
     /**
      * Event trigger to start the game

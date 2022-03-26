@@ -24,11 +24,15 @@
         <body class="m-0">
             <div id="homePage">
                 <h1 class="m-0 text-center">POKER 21</h1>
-                <div class="background-poker">
-                    <img src="./images/background-poker.jpeg" alt="Poker image">
+                <div class="homePageContent">
+                    <div class="w-100">
+                        <div class="background-poker">
+                            <img src="./images/background-poker.jpeg" alt="Poker background image">
+                        </div>
+                        <button id="start" class="d-block m-auto d-none">Commencer une partie</button>
+                        <button id="previousStart" class="d-block m-auto d-none">Reprendre la partie</button>
+                    </div>
                 </div>
-                <button id="start" class="d-block m-auto d-none">Commencer une partie</button>
-                <button id="previousStart" class="d-block m-auto d-none">Reprendre la partie</button>
             </div>
             <div class="d-none" id="homeGame">
                 <!-- Network status -->
@@ -81,7 +85,7 @@
                 </div>
 
                 <!-- Modal -->
-                <div class="container">
+                <div class="container d-none" id="container">
                     <details id="details">
                         <summary>
                             <div class="details-modal-overlay"></div>

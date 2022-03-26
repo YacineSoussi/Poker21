@@ -1,15 +1,5 @@
 /*** Modal ***/
 
-body {
-  @media only screen and (min-width: 600px) {
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    height: 100vh;
-    font-size: 100%;
-  }
-}
-
 .details-modal {
   background: #cbc9c9;
   border-radius: 0.5em;
