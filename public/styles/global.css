@@ -28,6 +28,10 @@
     margin-top: 8px;
 }
 
+.p-0 {
+    padding: 0;
+}
+
 .mb-2 {
     margin-bottom: 8px;
 }

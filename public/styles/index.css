@@ -126,6 +126,10 @@ body {
   margin: 0 5px;
 }
 
+#homeGame #pull {
+  background-color: transparent;
+}
+
 #homeGame #card-informations #pullCount {
   width: 50px;
 }
