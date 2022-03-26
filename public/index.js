@@ -1,27 +1,3 @@
-/*** DOM elements ***/
-
-const cancelPullID = document.getElementById("pullProcess");
-const cardPointsID = document.getElementById("card-points");
-const currentCardID = document.getElementById("card-pulled");
-const deckID = document.getElementById("deck");
-const detailInformationID = document.getElementById("detailInformation");
-const detailsID = document.getElementById("details");
-const finishID = document.getElementById("finish");
-const gameInformationID = document.getElementById("gameInformation");
-const homeGameID = document.getElementById("homeGame");
-const homePageID = document.getElementById("homePage");
-const mainID = document.getElementById("main");
-const missingCardsID = document.getElementById("missing-cards");
-const previousStartID = document.getElementById("previousStart");
-const pullCardID = document.getElementById("pullCard");
-const pullCountID = document.getElementById("pullCount");
-const pullID = document.getElementById("pull");
-const pullProcessingID = document.getElementById("pullProcess");
-const pullsID = document.getElementById("pulls");
-const retryID = document.getElementById("retry");
-const spinnerLoadingID = document.getElementById("spinner-block");
-const startID = document.getElementById("start");
-
 /*** Variables ***/
 
 const deck = new Deck();
@@ -29,7 +5,28 @@ const card = new Card();
 const user = new User();
 const toaster = new Toaster();
 
-let cardsConfig,
+let startID,
+    previousStartID,
+    retryID,
+    finishID,
+    pullID,
+    cardPointsID,
+    currentCardID,
+    deckID,
+    detailInformationID,
+    detailsID,
+    gameInformationID,
+    homeGameID,
+    homePageID,
+    mainID,
+    missingCardsID,
+    pullCardID,
+    pullCountID,
+    pullProcessingID,
+    spinnerLoadingID,
+    pullsID,
+    cancelPullID,
+    cardsConfig,
     currentCardPoints,
     pulledCardCount,
     gameStarting,
@@ -47,8 +44,9 @@ let cardsConfig,
  * Init variables
  */
 function initVariables() {
+    const cardsPoints = JSON.parse(localStorage.getItem('cardsPoints'));
     cardsConfig = {};
-    currentCardPoints = 0;
+    currentCardPoints = (cardsPoints?.currentCardPoints) ? cardsPoints.currentCardPoints : 0;
     pulledCardCount = -1;
     gameStarting = false;
     gameIsFinish = false;
@@ -74,6 +72,8 @@ function resetElements() {
     cardPointsID.innerHTML = '0';
     cardPointsID.setAttribute("value", '0');
     missingCardsID.innerHTML = '';
+    localStorage.removeItem("cardsPoints");
+    localStorage.removeItem("mainDOM");
 }
 
 /**
@@ -82,12 +82,21 @@ function resetElements() {
  * - Enable or disable DOM elements
  */
 function start() {
+    const mainCopy = JSON.parse(localStorage.getItem('mainDOM'));
     initVariables();
+
     if (localStorage.getItem('cardsConfig')) { // game already exist
         previousStartID.classList.add("d-none");
         spinnerLoadingID.classList.remove("hidden");
         mainID.classList.remove("hidden");
         setCardConfig(JSON.parse(localStorage.getItem('cardsConfig')));
+
+        // keep previous DOM content
+        if (mainCopy) {
+            mainID.innerHTML = mainCopy;
+            setDOMElements();
+            setAllEventsListener();
+        }
         gameStarting = true;
     } else { // new game
         startID.classList.add("d-none");
@@ -374,6 +383,12 @@ function createCardImage(card, deck) {
 
     // append card element to DOM
     deck.appendChild(cardImage);
+
+    // storage card points to keep last time
+    localStorage.setItem('cardsPoints', JSON.stringify({currentCardPoints}));
+
+    // store main content
+    localStorage.setItem('mainDOM', JSON.stringify(document.getElementById("main").innerHTML));
 }
 
 /**
@@ -447,37 +462,11 @@ function getRandomRotatePosition() {
     return Math.random() * (360 - 0);
 }
 
-/*** Events ***/
 
 /**
- * Event trigger to start the game
+ * Set pulls DOM element processing
  */
-startID.addEventListener("click", () => start());
-
-/**
- * Event trigger to get previous game
- */
-previousStartID.addEventListener("click", () => start());
-
-/**
- * Event trigger to retry the game
- */
-retryID.addEventListener("click", () => retry());
-
-/**
- * Event trigger finish the game
- */
-finishID.addEventListener("click", () => finish());
-
-/**
- * Event trigger to pull one card
- */
-pullID.addEventListener("click", () => getDeck(1));
-
-/**
- * Event trigger to pull multiple cards
- */
-pullsID.addEventListener("click", function() {
+function setPullsDOMProcess() {
     const value = Number(pullCountID.value);
     const maxAttributeValue = Number(pullCountID.getAttribute("max"));
 
@@ -490,7 +479,77 @@ pullsID.addEventListener("click", function() {
 
         pullCountID.value = 0;
     }
-});
+}
+
+/**
+ * Set all DOM elements of application
+ */
+function setDOMElements() {
+    cardPointsID = document.getElementById("card-points");
+    currentCardID = document.getElementById("card-pulled");
+    deckID = document.getElementById("deck");
+    detailInformationID = document.getElementById("detailInformation");
+    detailsID = document.getElementById("details");
+    gameInformationID = document.getElementById("gameInformation");
+    homeGameID = document.getElementById("homeGame");
+    homePageID = document.getElementById("homePage");
+    mainID = document.getElementById("main");
+    missingCardsID = document.getElementById("missing-cards");
+    pullCardID = document.getElementById("pullCard");
+    pullCountID = document.getElementById("pullCount");
+    pullProcessingID = document.getElementById("pullProcess");
+    spinnerLoadingID = document.getElementById("spinner-block");
+}
+
+/*** Events ***/
+
+/**
+ * Set all events listener of cards block manipulation
+ */
+function setAllEventsListener() {
+    startID = document.getElementById("start");
+    previousStartID = document.getElementById("previousStart");
+    retryID = document.getElementById("retry");
+    finishID = document.getElementById("finish");
+    pullID = document.getElementById("pull");
+    pullsID = document.getElementById("pulls");
+    cancelPullID = document.getElementById("pullProcess");
+
+    /**
+     * Event trigger to start the game
+     */
+    startID.addEventListener("click", () => start());
+
+    /**
+     * Event trigger to get previous game
+     */
+    previousStartID.addEventListener("click", () => start());
+
+    /**
+     * Event trigger to retry the game
+     */
+    retryID.addEventListener("click", () => retry());
+
+    /**
+     * Event trigger finish the game
+     */
+    finishID.addEventListener("click", () => finish());
+
+    /**
+     * Event trigger to pull one card
+     */
+    pullID.addEventListener("click", () => getDeck(1));
+
+    /**
+     * Event trigger to pull multiple cards
+     */
+    pullsID.addEventListener("click", () => setPullsDOMProcess());
+
+    /**
+     * Event trigger to abort http request during a card pulling
+     */
+    cancelPullID.addEventListener("click", () => abortCardPulling());
+}
 
 /**
  * Event trigger when user press a key
@@ -508,14 +567,11 @@ document.addEventListener("keypress", function onEvent(event) {
 });
 
 /**
- * Event trigger to abort http request during a card pulling
- */
-cancelPullID.addEventListener("click", () => abortCardPulling());
-
-/**
  * Event trigger when DOM loaded
  */
 window.addEventListener("load", () => {
+    setDOMElements();
+    setAllEventsListener();
     getNetworkStatus();
 
     if (localStorage.getItem('cardsConfig')) {
