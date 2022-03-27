@@ -211,7 +211,7 @@ function getDeckData(count, finish) {
             }
         }
     }).catch(() => {
-        if (cancelPullProcess) {
+        if (!cancelPullProcess) {
             displayToaster('danger', 'Erreur', 'Une erreur est survenu lors du tirage des cartes.');
         }
     });
