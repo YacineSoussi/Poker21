@@ -1,3 +1,55 @@
+import * as Type from "./type.js";
+
+/**
+ * {
+ *   "success": boolean,
+ *   "deck_id": string,
+ *   "shuffled": boolean,
+ *   "remaining": number
+ * }
+ */
+const getNewDeckIsValid = Type.object([
+    Type.property("success", Type.boolean),
+    Type.property("deck_id", Type.string),
+    Type.property("shuffled", Type.boolean),
+    Type.property("remaining", Type.number)
+]);
+
+/**
+ * {
+ *   cards: [{ "image": string, "value": string, "suit": string, "code": string }],
+ *   deck_id: string,
+ *   remaining: number,
+ *   success: boolean
+ * }
+ */
+const getDeckIsValid = Type.object([
+    Type.property("success", Type.boolean),
+    Type.property("deck_id", Type.string),
+    Type.property("cards", Type.array(Type.object([
+        Type.property("image", Type.string),
+        Type.property("value", Type.string),
+        Type.property("suit", Type.string),
+        Type.property("code", Type.string)
+    ]))),
+    Type.property("remaining", Type.number)
+]);
+
+/**
+ * {
+ *   "success": boolean,
+ *   "deck_id": string,
+ *   "shuffled": boolean,
+ *   "remaining": number
+ * }
+ */
+const shuffleDeckIsValid = Type.object([
+    Type.property("success", Type.boolean),
+    Type.property("deck_id", Type.string),
+    Type.property("shuffled", Type.boolean),
+    Type.property("remaining", Type.number)
+]);
+
 /**
  * Get new deck data
  * - { deck_id: null, remaining: null, shuffled: null, success: null }
@@ -26,8 +78,6 @@ async function getDeck(id, count, signal) {
     const url = `https://deckofcardsapi.com/api/deck/${id}/draw/?count=${count}`;
     const response = await fetch(url, { signal });
 
-    console.log('Response', response);
-
     if (response.ok) {
         return response.json();
     } else {
@@ -53,4 +103,4 @@ function shuffleDeck(id) {
         .then(data => data);
 }
 
-export { getNewDeck, getDeck, shuffleDeck };
+export { getNewDeck, getDeck, shuffleDeck, getNewDeckIsValid, getDeckIsValid, shuffleDeckIsValid };

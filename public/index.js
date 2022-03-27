@@ -1,4 +1,4 @@
-import { getNewDeck, getDeck, shuffleDeck } from './modules/deck.js';
+import { getNewDeck, getDeck, shuffleDeck, getNewDeckIsValid, getDeckIsValid, shuffleDeckIsValid } from './modules/deck.js';
 import { verifyUserWinning } from './modules/user.js';
 import { getCardSymbol, getCardPoints, updateMissingCards, setCardPoints } from './modules/card.js';
 
@@ -100,17 +100,26 @@ function start() {
             setDOMElements();
             setAllEventsListener();
         }
+
         gameStarting = true;
     } else { // new game
         startID.classList.add("d-none");
         spinnerLoadingID.classList.remove("hidden");
+
         getNewDeck().then(data => {
             if (data) {
+                if (!getNewDeckIsValid(data)) {
+                    return Promise.reject(new Error("Malformed data"));
+                }
+
                 mainID.classList.remove("hidden");
                 setCardConfig(data);
                 gameStarting = true;
+            } else {
+                displayToaster('warning', 'Information', 'Aucune données disponibles.');
             }
         }).catch(error => {
+            displayToaster("danger", "Erreur", "Une erreur est survenu lors du tirage des cartes.");
             throw new Error(error);
         });
     }
@@ -142,7 +151,7 @@ function finish(finish = false) {
     if (!gameIsFinish) {
         if (finish) {
             finishGame();
-            openModal("Détails de la partie" , "Tu as gagné, tu as 21 points !");
+            openModal("Détails" , "Tu as gagné, tu as 21 points.");
         } else {
             setDeckData(1, true);
         }
@@ -158,12 +167,19 @@ function retry() {
     shuffleDeck(cardsConfig.deck_id).then(data => {
         resetElements();
         if (data) {
+            if (!shuffleDeckIsValid(data)) {
+                return Promise.reject(new Error("Malformed data"));
+            }
+
             initVariables();
             setCardConfig(data);
             gameStarting = true;
+        } else {
+            displayToaster('warning', 'Information', 'Aucune données disponibles.');
         }
-    }).catch(err => {
-        throw new Error(err);
+    }).catch(error => {
+        displayToaster("danger", "Erreur", "Une erreur est survenu lors du tirage des cartes.")
+        throw new Error(error);
     });
 }
 
@@ -183,7 +199,11 @@ function startProcess() {
  */
 function getDeckData(count, finish) {
     getDeck(cardsConfig.deck_id, count, signal).then(data => {
-        if (data.cards?.length) {
+        if (!getDeckIsValid(data)) {
+            return Promise.reject(new Error("Malformed data"));
+        }
+
+        if (data) {
             pullProcessingID.classList.add("d-none");
             updateRemainingCards(data.remaining);
             addCard(data.cards, count);
@@ -201,19 +221,22 @@ function getDeckData(count, finish) {
                 userWin = verifyUserWinning(currentCardPoints + nextCardPoints);
 
                 if (userWin) {
-                    openModal("Détails de la partie" , "Tu as gagné, bravo !");
+                    openModal("Partie terminée" , "Tu as gagné, bravo.");
                 } else {
                     clearStorage();
-                    openModal("Détails de la partie", "Tu as perdu, réessaie !");
+                    openModal("Partie terminée", "Tu as perdu, réessaie.");
                 }
 
                 finishGame();
             }
+        } else {
+            displayToaster('warning', 'Information', 'Aucune données disponibles.');
         }
-    }).catch(() => {
+    }).catch(error => {
         if (!cancelPullProcess) {
-            displayToaster('danger', 'Erreur', 'Une erreur est survenu lors du tirage des cartes.');
+            displayToaster("danger", "Erreur", "Une erreur est survenu lors du tirage des cartes.")
         }
+        throw new Error(error);
     });
 }
 
@@ -286,7 +309,7 @@ function addCardOperations(cards) {
         if (currentCardPoints > 21) {
             finishGame();
             clearStorage();
-            openModal("Détails de la partie", "Tu as perdu, réessaie !");
+            openModal("Partie terminée", "Tu as perdu, réessaie.");
         }
 
         if (currentCardPoints === 21) {
@@ -481,7 +504,7 @@ function setPullsDOMProcess() {
         if (value < maxAttributeValue) {
             setDeckData(value);
         } else {
-            displayToaster('info', 'Information', `Tu ne peux pas tirer plus de ${maxAttributeValue} cartes !`);
+            displayToaster('info', 'Information', `Tu ne peux pas tirer plus de ${maxAttributeValue} cartes.`);
         }
 
         pullCountID.value = 0;
