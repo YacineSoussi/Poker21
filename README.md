@@ -74,7 +74,7 @@ To run tests, run the following command
 - Les cartes doivent être affichées les unes sur les autres de manière à imiter un paquet désordonné. ✅
 - Il doit y avoir une animation des cartes lorsque le joueur gagne une partie. ✅
 - Il doit y avoir une animation des cartes lorsque le joueur perd une partie. ✅
-- Il doit y avoir un retour haptique (vibreur) lorsqu’une carte est tirée, lors d’une victoire ou d’un échec. ✅
+- Il doit y avoir un retour haptique (vibreur) lorsqu’une carte est tirée, lors d’une victoire ou d’un échec. (ANDROID seulement) ✅
 - Il doit être possible de jouer à la fois sur mobile, tablette ou ordinateur. ✅
 - Il doit être possible de reprendre une partie à tout moment, même après avoir fermé l’onglet. ✅
 - Il doit y avoir une interface graphique pensée pour l’UX/UI et agréable à utiliser. ✅
