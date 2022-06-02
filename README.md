@@ -60,8 +60,6 @@ To run tests, run the following command
 - Il doit être possible de reprendre une partie à tout moment, même après avoir fermé l’onglet. ✅
 - Il doit être possible de tirer un nombre de cartes arbitraire à la fois. ✅
 - Il doit être possible de tirer une carte en appuyant sur la touche “D” du clavier. ✅
-- Il doit être possible de tirer une nouvelle carte en secouant l’appareil. ❌
-- Il doit être possible de tirer une nouvelle carte lorsque la main est proche du capteur de proximité. ❌
 - Il doit être possible de voir l’état courant du réseau (connecté, déconnecté). ✅
 - Il doit être possible de voir un titre correctement affiché dans l’onglet du navigateur. ✅
 - Il doit être possible de voir une icône affichée dans l’onglet du navigateur. ✅
